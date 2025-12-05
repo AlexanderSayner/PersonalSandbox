@@ -1,20 +1,56 @@
-```
-# Dependencies
+# Compiled and build artifacts
+*.class
+*.o
+*.obj
+*.out
+build/
 target/
+
+# Dependencies
 .gradle/
-.m2/
+node_modules/
+lib/
+
 # Logs and temp files
 *.log
 *.tmp
+*.swp
+
 # Environment
 .env
 .env.local
 *.env.*
+
 # Editors
 .vscode/
 .idea/
-# Docker
-.dockerignore
-Dockerfile
-docker-compose.yml
-```
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
