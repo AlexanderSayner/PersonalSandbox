@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Gradle startup script for Unix systems
+
+# Set the location of the wrapper script
+WRAPPER_JAR="gradle/wrapper/gradle-wrapper.jar"
+
+# Locate the project home directory
+PRJDIR=`dirname "$0"`
+cd "$PRJDIR"
+
+# Check if Java is available
+if [ -n "$JAVA_HOME" ]; then
+    JAVA="$JAVA_HOME/bin/java"
+else
+    JAVA=`which java`
+    if [ -z "$JAVA" ]; then
+        echo "Error: JAVA_HOME environment variable not set and 'java' command not found."
+        exit 1
+    fi
+fi
+
+# Check if the wrapper jar exists
+if [ ! -f "$WRAPPER_JAR" ]; then
+    echo "Error: Wrapper JAR file not found: $WRAPPER_JAR"
+    exit 1
+fi
+
+# Execute the wrapper
+exec "$JAVA" -jar "$WRAPPER_JAR" org.gradle.wrapper.GradleWrapperMain "$@"
