@@ -23,7 +23,7 @@ public class BookGraphQLApi {
     
     @Query("book")
     @Description("Get a book by its ID")
-    public Book getBook(@Name("id") String id) {
+    public Book getBook(@Name("id") Long id) {
         Optional<Book> book = bookService.getBookById(id);
         if (book.isPresent()) {
             return book.get();
@@ -41,16 +41,13 @@ public class BookGraphQLApi {
     @Mutation
     @Description("Add a new book to the library")
     public Book addBook(@Name("input") BookInput input) {
-        Book book = new Book();
-        book.setTitle(input.getTitle());
-        book.setAuthor(input.getAuthor());
-        book.setYear(input.getYear());
+        Book book = new Book(input.getTitle(), input.getAuthor(), input.getYear());
         return bookService.addBook(book);
     }
     
     @Mutation
     @Description("Update an existing book")
-    public Book updateBook(@Name("id") String id, @Name("input") BookInput input) {
+    public Book updateBook(@Name("id") Long id, @Name("input") BookInput input) {
         Book updatedBook = new Book();
         updatedBook.setTitle(input.getTitle());
         updatedBook.setAuthor(input.getAuthor());
@@ -64,7 +61,7 @@ public class BookGraphQLApi {
     
     @Mutation
     @Description("Delete a book by ID")
-    public boolean deleteBook(@Name("id") String id) {
+    public boolean deleteBook(@Name("id") Long id) {
         boolean deleted = bookService.deleteBook(id);
         if (!deleted) {
             throw new BookNotFoundException("Book with ID " + id + " not found for deletion");

@@ -34,6 +34,49 @@ To run tests:
 ./gradlew test
 ```
 
+## Docker Deployment
+
+The project includes Docker support for easy deployment.
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+### Building and Running with Docker
+
+1. First, build the project WAR file:
+   ```bash
+   ./gradlew build
+   ```
+
+2. Build and run the Docker container:
+   ```bash
+   docker build -t javaee-graphql-project .
+   docker run -p 8080:8080 javaee-graphql-project
+   ```
+
+### Using Docker Compose
+
+For easier management and future service extensions, use Docker Compose:
+
+1. Build and run with Docker Compose:
+   ```bash
+   docker-compose up --build
+   ```
+
+2. To run in detached mode:
+   ```bash
+   docker-compose up --build -d
+   ```
+
+3. To stop the services:
+   ```bash
+   docker-compose down
+   ```
+
+The application will be available at `http://localhost:8080/javaee-graphql-project`.
+
 ## GraphQL API
 
 The application provides a GraphQL API with the following operations:
@@ -65,3 +108,36 @@ The generated WAR file can be deployed to any Jakarta EE compatible application 
 ## Project Setup
 
 This project uses Gradle wrapper, so you don't need to install Gradle separately. Just run the commands with `./gradlew` instead of `gradle`.
+
+## Docker Deployment
+
+This project includes a Dockerfile for easy deployment. To build and run the application using Docker:
+
+### Build the Docker Image
+
+```bash
+docker build -t javaee-graphql-project .
+```
+
+### Run the Docker Container
+
+```bash
+docker run -p 8080:8080 javaee-graphql-project
+```
+
+The application will be accessible at `http://localhost:8080/javaee-graphql-project`.
+
+### Docker Compose (Optional)
+
+You can also use Docker Compose to run the application:
+
+```yaml
+version: '3.8'
+services:
+  graphql-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1024m
+```
