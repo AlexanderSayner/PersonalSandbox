@@ -1,39 +1,27 @@
-# Compiled and build artifacts
-*.pyc
-*.class
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.a
-*.out
-dist/
+```
+# Dependencies
+.gradle/
 build/
+target/
 
-# Editors and IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
+# Logs and temp files
+*.log
 *.tmp
 
-# Logs
-*.log
-
-# System files
-.DS_Store
-Thumbs.db
+# Environment
 .env
 .env.local
 *.env.*
 
-# Coverage
-coverage/
-htmlcov/
-.coverage
+# Editors
+.vscode/
+.idea/
 
-# Compressed files
+# OS
+.DS_Store
+Thumbs.db
+
+# Archives
 *.zip
 *.gz
 *.tar
@@ -56,3 +44,4 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
+```
