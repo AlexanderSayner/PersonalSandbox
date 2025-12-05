@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.unbroken-dome.xjc' version '2.0.0' // For JAXB code generation if needed
+}
+
+group = 'com.example'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Jakarta EE API
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:10.0.0'
+    
+    // SmallRye GraphQL (MicroProfile GraphQL implementation)
+    implementation 'io.smallrye:smallrye-graphql:1.8.2'
+    
+    // JSON-P for JSON processing
+    implementation 'jakarta.json:jakarta.json-api:2.1.2'
+    
+    // JUnit for testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Configure WAR plugin
+war {
+    archiveFileName = 'javaee-graphql-project.war'
+    webInf { 
+        from 'src/main/webapp/WEB-INF'
+    }
+}
