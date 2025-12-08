@@ -48,8 +48,54 @@ services:
     networks:
       - app-network
 
+  # Spring Reviewer Service
+  reviewer-service:
+    build:
+      context: ./spring-reviewer-service
+      dockerfile: Dockerfile
+    container_name: reviewer-service
+    ports:
+      - "8082:8080"
+    depends_on:
+      - javaee-app
+      - redis
+      - mongodb
+    environment:
+      - JAVAEE_APP_URL=http://javaee-app:8080
+      - REDIS_HOST=redis
+      - MONGODB_HOST=mongodb
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Redis for caching books
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # MongoDB for storing reviews
+  mongodb:
+    image: mongo:5
+    container_name: mongodb-reviews
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: revieweruser
+      MONGO_INITDB_ROOT_PASSWORD: reviewerpwd
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  mongodb_data:
 
 networks:
   app-network:
