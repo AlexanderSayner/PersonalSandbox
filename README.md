@@ -1,6 +1,17 @@
-# JavaEE GraphQL Book Library with PostgreSQL
+# Library web system
 
-This project demonstrates a JavaEE application using GraphQL to manage a book library stored in PostgreSQL. The original in-memory implementation has been modified to use JPA with PostgreSQL as the persistent data store.
+This project demonstrates a Java stack web system for a bookshop management 
+
+## Projects Overview
+
+### Javaee-graphql-project
+JavaEE App is a Book Library service based on ***Jakarta EE 10*** and Java 17.
+Uses ***GraphQL*** as an API and ***Postgres*** for a data storage.
+
+### Spring-reviewer-service
+Spring reviewer service made for Books Reviewing based on pure ***Spring 7*** framework.
+Takes a book from Book Library service and caches it in ***Redis***.
+Reviews themselves store in ***MongoDB***. 
 
 ## Changes Made
 
