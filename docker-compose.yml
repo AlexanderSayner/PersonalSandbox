@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: librarydb
+      POSTGRES_USER: libraryuser
+      POSTGRES_PASSWORD: librarypass
+    ports:
+      - "6543:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  javaee-app:
+    build:
+      context: ./javaee-graphql-project
+      dockerfile: Dockerfile
+    container_name: javaee-graphql-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_DB=librarydb
+      - POSTGRES_USER=libraryuser
+      - POSTGRES_PASSWORD=librarypass
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  adminer:
+    image: adminer
+    container_name: adminer-db-ui
+    ports:
+      - "8081:8080"
+    environment:
+      - ADMINER_DEFAULT_DB_DRIVER=pgsql
+      - ADMINER_DEFAULT_DB_HOST=postgres
+      - ADMINER_DEFAULT_DB_NAME=librarydb
+      - ADMINER_DEFAULT_DB_USER=libraryuser
+      - ADMINER_DEFAULT_DB_PASS=librarypass
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  # Spring Reviewer Service
+  reviewer-service:
+    build:
+      context: ./spring-reviewer-service
+      dockerfile: Dockerfile
+    container_name: reviewer-service
+    ports:
+      - "8082:8080"
+    depends_on:
+      - javaee-app
+      - redis
+      - mongodb
+    environment:
+      - JAVAEE_APP_URL=http://javaee-app:8080
+      - REDIS_HOST=redis
+      - MONGODB_HOST=mongodb
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Redis for caching books
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # MongoDB for storing reviews
+  mongodb:
+    image: mongo:5
+    container_name: mongodb-reviews
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: revieweruser
+      MONGO_INITDB_ROOT_PASSWORD: reviewerpwd
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge

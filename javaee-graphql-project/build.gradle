@@ -22,6 +22,18 @@ dependencies {
     // JSON-P for JSON processing
     implementation 'jakarta.json:jakarta.json-api:2.1.2'
     
+    // JPA API
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+    
+    // JTA API
+    implementation 'jakarta.transaction:jakarta.transaction-api:2.0.1'
+    
+    // PostgreSQL JDBC Driver
+    implementation 'org.postgresql:postgresql:42.6.0'
+    
+    // Hibernate Core (JPA Implementation)
+    implementation 'org.hibernate:hibernate-core:6.2.7.Final'
+    
     // JUnit for testing
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
@@ -34,7 +46,8 @@ test {
 // Configure WAR plugin
 war {
     archiveFileName = 'javaee-graphql-project.war'
-    webInf { 
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    webInf {
         from 'src/main/webapp/WEB-INF'
     }
 }

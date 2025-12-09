@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group = 'com.reviewer'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Framework 7.0.1
+    implementation 'org.springframework:spring-core:7.0.1'
+    implementation 'org.springframework:spring-web:7.0.1'
+    implementation 'org.springframework:spring-webmvc:7.0.1'
+    implementation 'org.springframework:spring-context:7.0.1'
+    implementation 'org.springframework:spring-context-support:7.0.1'
+    implementation 'org.springframework:spring-beans:7.0.1'
+    implementation 'org.springframework:spring-expression:7.0.1'
+    
+    // Spring Data Redis
+    implementation 'org.springframework.data:spring-data-redis:3.0.0'
+
+    // Post construct etc.
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    
+    // Redis client
+    implementation 'redis.clients:jedis:4.3.1'
+    
+    // Spring Data MongoDB
+    implementation 'org.springframework.data:spring-data-mongodb:4.0.0'
+    
+    // MongoDB driver
+    implementation 'org.mongodb:mongodb-driver-sync:4.8.0'
+    
+    // Jackson for JSON processing
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
+    
+    // Servlet API
+    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+    
+    // JUnit 5 for testing
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    
+    // Apache HTTP Client for making requests to JavaEE app
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    
+    // Logging
+    implementation 'org.slf4j:slf4j-api:2.0.6'
+    implementation 'ch.qos.logback:logback-classic:1.4.5'
+}
+
+// Task to build WAR file
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+// Create a task to copy dependencies (for Docker)
+task copyDependencies(type: Copy) {
+    from configurations.runtimeClasspath
+    into 'lib'
+}
