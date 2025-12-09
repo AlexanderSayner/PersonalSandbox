@@ -30,6 +30,32 @@ public class ReviewController {
     @PostMapping("/book/{bookId}")
     public ResponseEntity<?> addReview(@PathVariable String bookId, @RequestBody Review review) {
         try {
+            if (bookId == null || bookId.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body("Book ID cannot be null or empty");
+            }
+            
+            if (review == null) {
+                return ResponseEntity.badRequest()
+                        .body("Review cannot be null");
+            }
+            
+            // Validate review fields
+            if (review.getReviewerName() == null || review.getReviewerName().trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body("Reviewer name cannot be null or empty");
+            }
+            
+            if (review.getRating() < 1 || review.getRating() > 5) {
+                return ResponseEntity.badRequest()
+                        .body("Rating must be between 1 and 5");
+            }
+            
+            if (review.getComment() == null || review.getComment().trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body("Review comment cannot be null or empty");
+            }
+            
             // Verify the book exists by fetching it from the JavaEE app via cache
             Book book = bookService.getBookById(bookId);
             if (book == null) {

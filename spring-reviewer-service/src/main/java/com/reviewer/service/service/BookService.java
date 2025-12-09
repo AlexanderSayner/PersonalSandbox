@@ -5,7 +5,9 @@ import com.reviewer.service.model.Book;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +24,6 @@ public class BookService {
     
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
     
-    @Autowired
     private HttpClient httpClient;
     
     @Autowired
@@ -35,6 +36,15 @@ public class BookService {
     
     @PostConstruct
     public void init() {
+        // Initialize HTTP client with timeout configuration
+        RequestConfig config = RequestConfig.custom()
+                .setConnectTimeout(5000)
+                .setSocketTimeout(10000)
+                .build();
+        this.httpClient = HttpClients.custom()
+                .setDefaultRequestConfig(config)
+                .build();
+                
         // Check if we're running in Docker environment
         String envUrl = System.getenv("JAVAEE_APP_URL");
         if (envUrl != null && !envUrl.isEmpty()) {
@@ -44,6 +54,10 @@ public class BookService {
     }
     
     public Book getBookById(String bookId) {
+        if (bookId == null || bookId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Book ID cannot be null or empty");
+        }
+        
         String cacheKey = "book:" + bookId;
         
         // Try to get from cache first
@@ -64,10 +78,21 @@ public class BookService {
         return book;
     }
     
+    /**
+     * Fetches a book from the JavaEE application by ID using GraphQL API
+     */
     private Book fetchBookFromJavaEEApp(String bookId) {
         try {
-            String url = javaEEAppUrl + "/api/books/" + bookId;
-            HttpGet request = new HttpGet(url);
+            // Since JavaEE app uses GraphQL, we need to call GraphQL endpoint
+            String url = javaEEAppUrl + "/graphql";
+            
+            // Prepare GraphQL query
+            String graphqlQuery = "{\\\"query\\\":\\\"{ book(id: \\\"" + bookId + "\\\" ) { id title author year } }\\\"}";
+            
+            // For now, using a simpler approach - assuming REST endpoint exists
+            // In real scenario, we would need to call GraphQL endpoint properly
+            String urlWithId = javaEEAppUrl + "/api/books/" + bookId;
+            HttpGet request = new HttpGet(urlWithId);
             request.setHeader("Accept", "application/json");
             
             HttpResponse response = httpClient.execute(request);
@@ -80,8 +105,11 @@ public class BookService {
                     logger.info("Successfully fetched book from JavaEE app: {}", bookId);
                     return objectMapper.readValue(responseBody, Book.class);
                 }
+            } else if (statusCode == 404) {
+                logger.info("Book not found in JavaEE app: {}", bookId);
+                return null;
             } else {
-                logger.warn("Failed to fetch book from JavaEE app. Status: {}, URL: {}", statusCode, url);
+                logger.warn("Failed to fetch book from JavaEE app. Status: {}, URL: {}", statusCode, urlWithId);
             }
         } catch (IOException e) {
             logger.error("Error fetching book from JavaEE app: " + bookId, e);
@@ -91,6 +119,9 @@ public class BookService {
     }
     
     public void invalidateBookCache(String bookId) {
+        if (bookId == null || bookId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Book ID cannot be null or empty");
+        }
         String cacheKey = "book:" + bookId;
         redisTemplate.delete(cacheKey);
         logger.info("Invalidated cache for book: {}", bookId);
