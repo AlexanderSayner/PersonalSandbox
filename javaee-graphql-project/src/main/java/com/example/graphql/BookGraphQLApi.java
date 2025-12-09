@@ -41,6 +41,7 @@ public class BookGraphQLApi {
     @Mutation
     @Description("Add a new book to the library")
     public Book addBook(@Name("input") BookInput input) {
+        validateBookInput(input);
         Book book = new Book(input.getTitle(), input.getAuthor(), input.getYear());
         return bookService.addBook(book);
     }
@@ -48,6 +49,11 @@ public class BookGraphQLApi {
     @Mutation
     @Description("Update an existing book")
     public Book updateBook(@Name("id") Long id, @Name("input") BookInput input) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Book ID must be a positive number");
+        }
+        validateBookInput(input);
+        
         Book updatedBook = new Book();
         updatedBook.setTitle(input.getTitle());
         updatedBook.setAuthor(input.getAuthor());
@@ -62,11 +68,30 @@ public class BookGraphQLApi {
     @Mutation
     @Description("Delete a book by ID")
     public boolean deleteBook(@Name("id") Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Book ID must be a positive number");
+        }
         boolean deleted = bookService.deleteBook(id);
         if (!deleted) {
             throw new BookNotFoundException("Book with ID " + id + " not found for deletion");
         }
         return true;
+    }
+    
+    // Validation method for book input
+    private void validateBookInput(BookInput input) {
+        if (input == null) {
+            throw new IllegalArgumentException("Book input cannot be null");
+        }
+        if (input.getTitle() == null || input.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Book title cannot be null or empty");
+        }
+        if (input.getAuthor() == null || input.getAuthor().trim().isEmpty()) {
+            throw new IllegalArgumentException("Book author cannot be null or empty");
+        }
+        if (input.getYear() < 0) {
+            throw new IllegalArgumentException("Book year cannot be negative");
+        }
     }
     
     // Input class for mutations
