@@ -43,7 +43,7 @@ public class Book {
         this.year = year;
     }
     
-    public String getId() {
+    public Long getId() {
         return id;
     }
     

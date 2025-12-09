@@ -46,7 +46,8 @@ test {
 // Configure WAR plugin
 war {
     archiveFileName = 'javaee-graphql-project.war'
-    webInf { 
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    webInf {
         from 'src/main/webapp/WEB-INF'
     }
 }

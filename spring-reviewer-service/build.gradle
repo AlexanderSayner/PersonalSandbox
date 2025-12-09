@@ -5,7 +5,7 @@ plugins {
 
 group = 'com.reviewer'
 version = '1.0.0'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
@@ -23,6 +23,9 @@ dependencies {
     
     // Spring Data Redis
     implementation 'org.springframework.data:spring-data-redis:3.0.0'
+
+    // Post construct etc.
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
     
     // Redis client
     implementation 'redis.clients:jedis:4.3.1'
