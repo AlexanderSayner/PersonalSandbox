@@ -7,6 +7,9 @@
     
     <display-name>Java EE GraphQL Project</display-name>
     
+    <!-- WildFly should automatically register SmallRye GraphQL endpoints -->
+    <!-- The GraphQL endpoint will be available at /graphql -->
+    
     <!-- Optional: welcome files -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
