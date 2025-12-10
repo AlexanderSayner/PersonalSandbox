@@ -20,20 +20,21 @@ COPY --chown=jboss:jboss src/main/resources/postgresql-module.xml /opt/jboss/wil
 RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/
 # Download and install PostgreSQL JDBC driver
 RUN curl -L https://jdbc.postgresql.org/download/postgresql-42.6.0.jar -o /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/postgresql-42.6.0.jar
-# Create JBoss CLI script to configure PostgreSQL datasource
+# Create JBoss CLI script to configure PostgreSQL datasource and set node identifier
 RUN echo "embed-server --std-out=echo" > /tmp/datasource-configuration.cli && \
     echo "/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-xa-datasource-class-name=org.postgresql.xa.PGXADataSource)" >> /tmp/datasource-configuration.cli && \
     echo "/subsystem=datasources/data-source=PostgreSQLDS:add(jndi-name=java:jboss/datasources/PostgreSQLDS,enabled=true,driver-name=postgresql,connection-url=jdbc:postgresql://postgres:5432/librarydb,initial-pool-size=5,min-pool-size=5,max-pool-size=20,user-name=libraryuser,password=librarypass)" >> /tmp/datasource-configuration.cli && \
+    echo "/subsystem=transactions:write-attribute(name=node-identifier, value=\"your-unique-node-id\")" >> /tmp/datasource-configuration.cli && \
     echo "stop-embedded-server" >> /tmp/datasource-configuration.cli
 # Run the CLI script to configure the datasource
 RUN /opt/jboss/wildfly/bin/jboss-cli.sh --file=/tmp/datasource-configuration.cli
+# Clean up the standalone_xml_history directory
+RUN rm -rf /opt/jboss/wildfly/standalone/configuration/standalone_xml_history/*
 # Copy the built WAR file from the build stage
 COPY --from=build /build/build/libs/javaee-graphql-project.war /opt/jboss/wildfly/standalone/deployments/
 # Create a startup configuration file
 COPY standalone.conf /opt/jboss/wildfly/bin/
-
 # Expose port 8080
 EXPOSE 8080
-
 # Run WildFly
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0"]
