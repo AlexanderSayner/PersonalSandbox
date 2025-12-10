@@ -4,6 +4,6 @@ import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 
 // Standard JAX-RS Application class to enable JAX-RS endpoints
-@ApplicationPath("/")
+@ApplicationPath("/graphql")
 public class GraphQLApplication extends Application {
 }
