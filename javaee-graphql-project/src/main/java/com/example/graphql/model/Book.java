@@ -23,7 +23,7 @@ public class Book {
     @Name("author")
     private String author;
     
-    @Column(name = "year")
+    @Column(name = "publication_year")
     @Name("year")
     private int year;
     
