@@ -4,12 +4,22 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
          https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
-    
+
     <display-name>Java EE GraphQL Project</display-name>
-    
+
+    <servlet>
+        <servlet-name>GraphQLServlet</servlet-name>
+        <servlet-class>com.example.graphql.servlet.BookGraphQLServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>GraphQLServlet</servlet-name>
+        <url-pattern>/graphql</url-pattern>
+    </servlet-mapping>
+
     <!-- Optional: welcome files -->
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-    
+
 </web-app>
