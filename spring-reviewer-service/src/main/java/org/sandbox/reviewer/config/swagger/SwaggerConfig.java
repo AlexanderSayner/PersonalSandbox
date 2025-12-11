@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("your.controller.package"))
+                .apis(RequestHandlerSelectors.basePackage("org.sandbox.reviewer"))
                 .paths(PathSelectors.any())
                 .build();
     }
