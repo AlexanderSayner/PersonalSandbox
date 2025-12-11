@@ -5,7 +5,7 @@ This project demonstrates a Java stack web system for a bookshop management
 ## Projects Overview
 
 ### Javaee-graphql-project
-JavaEE App is a Book Library service based on ***Jakarta EE 11*** and Java 17.
+JavaEE App is a Book Library service based on ***Jakarta EE 11*** deploying by ***WildFly*** and Java 17.
 Uses ***GraphQL*** as an API and ***Postgres*** for a data storage.
 
 ### Spring-reviewer-service

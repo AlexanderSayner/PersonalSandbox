@@ -1,0 +1,38 @@
+# Define the Book type
+type Book {
+    id: ID!
+    title: String!
+    author: String!
+    year: Int!
+}
+
+# Queries available in the API
+type Query {
+    # Get all books
+    allBooks: [Book!]!
+
+    # Get a specific book by ID
+    book(id: ID!): Book
+
+    # Find books by author
+    booksByAuthor(author: String!): [Book!]!
+}
+
+# Input type for adding or updating a book
+input BookInput {
+    title: String!
+    author: String!
+    year: Int!
+}
+
+# Mutations available in the API
+type Mutation {
+    # Add a new book
+    addBook(input: BookInput!): Book!
+
+    # Update an existing book
+    updateBook(id: ID!, input: BookInput!): Book!
+
+    # Delete a book by ID
+    deleteBook(id: ID!): Boolean!
+}
