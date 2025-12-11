@@ -79,6 +79,8 @@ The application will be available at `http://localhost:8080/javaee-graphql-proje
 
 ## GraphQL API
 
+Available at `http://localhost:8080/javaee-graphql-project/graphql`
+
 The application provides a GraphQL API with the following operations:
 
 ### Queries

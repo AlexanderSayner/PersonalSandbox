@@ -45,6 +45,9 @@ dependencies {
     // Logging
     implementation 'org.slf4j:slf4j-api:2.0.6'
     implementation 'ch.qos.logback:logback-classic:1.5.13'
+
+    // Swagger 2
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
     
     // Servlet API
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'

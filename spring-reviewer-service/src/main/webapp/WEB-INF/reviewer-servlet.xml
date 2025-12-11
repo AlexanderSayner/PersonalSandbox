@@ -15,10 +15,14 @@
     <context:property-placeholder location="classpath:application.properties" />
 
     <!-- Enable component scanning -->
-    <context:component-scan base-package="com.reviewer.service" />
+    <context:component-scan base-package="org.sandbox.reviewer" />
 
     <!-- Enable annotation-driven MVC -->
     <mvc:annotation-driven />
+
+    <!-- Swagger 2 configuration -->
+    <bean class="org.sandbox.reviewer.config.swagger.SwaggerConfig" />
+    <bean class="org.sandbox.reviewer.config.web.WebConfig" />
 
     <!-- Redis Configuration -->
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">

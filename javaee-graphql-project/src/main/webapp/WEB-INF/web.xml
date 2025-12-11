@@ -9,7 +9,7 @@
 
     <servlet>
         <servlet-name>GraphQLServlet</servlet-name>
-        <servlet-class>com.example.graphql.servlet.BookGraphQLServlet</servlet-class>
+        <servlet-class>org.sandbox.graphql.servlet.BookGraphQLServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
