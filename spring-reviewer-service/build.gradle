@@ -38,6 +38,13 @@ dependencies {
     
     // Jackson for JSON processing
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
+
+    // Apache HTTP Client for making requests to JavaEE app
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-api:2.0.6'
+    implementation 'ch.qos.logback:logback-classic:1.5.13'
     
     // Servlet API
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
@@ -51,13 +58,9 @@ dependencies {
     
     // Spring Test
     testImplementation 'org.springframework:spring-test:7.0.1'
-    
-    // Apache HTTP Client for making requests to JavaEE app
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-    
-    // Logging
-    implementation 'org.slf4j:slf4j-api:2.0.6'
-    implementation 'ch.qos.logback:logback-classic:1.4.5'
+
+    // Apache utils
+    testImplementation 'commons-io:commons-io:2.14.0'
 }
 
 // Task to build WAR file
@@ -69,4 +72,8 @@ tasks.withType(JavaCompile) {
 task copyDependencies(type: Copy) {
     from configurations.runtimeClasspath
     into 'lib'
+}
+
+test {
+    useJUnitPlatform()
 }
