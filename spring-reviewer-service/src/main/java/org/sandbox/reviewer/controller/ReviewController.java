@@ -26,7 +26,12 @@ public class ReviewController {
     
     @Autowired
     private BookService bookService;
-    
+
+    @PostMapping("/test/{bookId}")
+    public ResponseEntity<?> addReviewTest(@PathVariable String bookId, @RequestBody Review review) {
+        return ResponseEntity.ok("Test route, got an id: " + bookId);
+    }
+
     @PostMapping("/book/{bookId}")
     public ResponseEntity<?> addReview(@PathVariable String bookId, @RequestBody Review review) {
         try {
