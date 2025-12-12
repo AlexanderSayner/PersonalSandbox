@@ -105,3 +105,93 @@ The application automatically creates the `books` table with the following struc
 - `title` (VARCHAR, NOT NULL)
 - `author` (VARCHAR, NOT NULL)
 - `year` (INTEGER)
+
+# Pure Spring Configuration Example
+
+This workspace also includes a standalone Spring application configured entirely with pure Spring configuration, without using Spring Boot.
+
+## Features
+
+- Pure Spring configuration using Java annotations
+- No Spring Boot dependencies
+- MVC architecture with JSP views
+- Deployable via Docker
+- Maven-based build system
+
+## Project Structure
+
+```
+src/
+├── main/
+│   ├── java/
+│   │   └── com/example/
+│   │       ├── controller/
+│   │       │   └── HomeController.java
+│   │       └── config/
+│   │           ├── WebConfig.java
+│   │           └── WebInitializer.java
+│   ├── webapp/
+│   │   ├── WEB-INF/
+│   │   │   └── views/
+│   │   │       ├── home.jsp
+│   │       │       └── about.jsp
+│   │   └── resources/
+│   │       └── css/
+│   │           └── style.css
+└── pom.xml
+```
+
+## How to Build and Run
+
+### Using Maven (for local development)
+
+```bash
+# Compile and package the application
+mvn clean package
+
+# Run with embedded Jetty server
+mvn jetty:run
+```
+
+The application will be available at `http://localhost:8080`
+
+### Using Docker
+
+```bash
+# Build the application
+mvn clean package
+
+# Build the Docker image
+docker build -t pure-spring-app .
+
+# Run the container
+docker run -p 8080:8080 pure-spring-app
+```
+
+### Using Docker Compose
+
+```bash
+# Build and run with Docker Compose
+docker-compose -f docker-compose.spring.yml up --build
+```
+
+## Configuration Details
+
+- **WebConfig.java**: Contains Spring MVC configuration using `@Configuration` annotation
+- **WebInitializer.java**: Implements WebApplicationInitializer to replace traditional `web.xml` with Java configuration, properly setting up the Spring context and dispatcher servlet
+- **HomeController.java**: Basic controller with two endpoints
+- **JSP Views**: Located in `src/main/webapp/WEB-INF/views/`
+- **Static Resources**: Located in `src/main/webapp/resources/`
+
+## Endpoints
+
+- `GET /` - Home page
+- `GET /about` - About page
+
+## Dependencies
+
+- Spring Framework 5.3.21
+- Servlet API 4.0.1
+- JSP API 2.3.3
+- JSTL 1.2
+- Jetty 9.4.44 (for local testing)
