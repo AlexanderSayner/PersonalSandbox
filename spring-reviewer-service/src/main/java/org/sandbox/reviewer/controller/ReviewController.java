@@ -26,7 +26,23 @@ public class ReviewController {
     
     @Autowired
     private BookService bookService;
-    
+
+    @PostMapping("/test/{bookId}")
+    public ResponseEntity<?> addReviewTest(@PathVariable String bookId, @RequestBody Review review) {
+        // Add your logic here
+        return ResponseEntity.ok("Review added for book ID: " + bookId);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<?> testGet() {
+        return ResponseEntity.ok("test get");
+    }
+
+    @GetMapping("/get/param/{bookId}")
+    public ResponseEntity<?> getPath(@PathVariable String bookId) {
+        return ResponseEntity.ok("test get "+bookId);
+    }
+
     @PostMapping("/book/{bookId}")
     public ResponseEntity<?> addReview(@PathVariable String bookId, @RequestBody Review review) {
         try {

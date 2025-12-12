@@ -54,7 +54,7 @@ The application is designed to run in Docker with the JavaEE library application
 docker-compose up --build
 ```
 
-The reviewer service will be available at `http://localhost:8082/api/reviews`
+The reviewer service will be available at `http://localhost:8082/reviewer/api/reviews`
 
 ## Dependencies
 
