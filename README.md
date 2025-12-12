@@ -5,12 +5,12 @@ This project demonstrates a distributed Java microservices system for bookshop m
 ## Projects Overview
 
 ### JavaEE GraphQL Project
-JavaEE application serving as the core Book Library service based on ***Jakarta EE 11*** and Java 17.
+JavaEE application serving as the core Book Library service based on ***Jakarta EE 11*** and ***Java 17***.
 Uses ***GraphQL*** as the primary API and ***PostgreSQL*** for persistent data storage.
-Deployed on WildFly application server via Docker containerization.
+Deployed on ***WildFly*** application server via ***Docker*** containerization.
 
 ### Spring Reviewer Service
-Spring Framework (non-Boot) service providing book reviewing functionality.
+***Spring Framework 7*** (non-Boot) service providing book reviewing functionality.
 Fetches book information from the JavaEE library service and caches frequently accessed books in ***Redis***.
 Reviews are stored in ***MongoDB*** for scalable document storage.
 
