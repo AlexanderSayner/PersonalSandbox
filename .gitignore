@@ -1,78 +1,12 @@
-# General
+```
+# Logs and temp files
 *.log
-*.tmp
-*.swp
-.DS_Store
 
-# IDEs
-## IntelliJ IDEA
-.idea/
-*.iml
-*.iws
-*.ipr
-out/
+# Environment
+.env
+.env.local
+*.env.*
 
-## Eclipse
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings/
-.springBeans
-.sts4-cache
-.metadata/
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.loadpath
-.recommenders
-.externalToolBuilders/
-*.launch
-.cproject
-.factorypath
-.buildpath
-.sbteclipse
-.tern-project
-.texlipse
-.cache-main
-.scala_dependencies
-.worksheet
-
-## Netbeans
-nbproject/private/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-## Visual Studio Code
+# Editors
 .vscode/
-
-# Build tools
-## Gradle
-.gradle/
-build/
-!gradle-wrapper.jar
-gradletasknamecache
-
-# Frameworks
-## Jakarta EE and Spring Boot
-.mvn/
-mvnw
-mvnw.cmd
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-# Svelte
-node_modules/
-dist/
+```
