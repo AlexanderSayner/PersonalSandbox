@@ -61,3 +61,6 @@ The reviewer service will be available at `http://localhost:8082/reviewer/api/re
 - JavaEE Library Application (running on http://javaee-app:8080)
 - Redis (running on redis:6379)
 - MongoDB (running on mongodb:27017)
+
+## Open API
+`http://localhost:8082/reviewer/v3/api-docs`

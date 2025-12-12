@@ -1,16 +1,21 @@
 package org.sandbox.reviewer.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
+import jakarta.annotation.PreDestroy;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpEntityContainer;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.sandbox.reviewer.model.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +24,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -75,16 +82,30 @@ public class BookService {
     }
 
     private Book fetchBookFromJavaEEApp(String bookId) {
-        String urlWithId = javaEEAppUrl + "/api/books/" + bookId;
-        HttpGet request = new HttpGet(urlWithId);
-        request.setHeader("Accept", "application/json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put("query", "query Book { book(id: \"%s\") { id title author year } }"
+                .formatted(bookId));
+        String graphQlQuery;
+        try {
+            graphQlQuery = objectMapper.writeValueAsString(queryMap);
+        } catch (JsonProcessingException e) {
+            logger.error("Failed to cook GraphQL request json query with {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+        String url = javaEEAppUrl + "/javaee-graphql-project/graphql"; // http://docker-container/context-project/graphql
+        logger.info("Executing GraphQL query\n'{}'\n url '{}'", graphQlQuery, url);
+        HttpPost request = new HttpPost(url);
+        request.setHeader("Content-Type", "application/json");
+        request.setEntity(new StringEntity(graphQlQuery, ContentType.APPLICATION_JSON));
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             int statusCode = response.getCode();
             if (statusCode == 200) {
-                return processResponse(response);
+                logger.info("JavaEE GraphQL response code is 200");
+                return processGraphQLResponse(response);
             } else {
-                handleErrorResponse(statusCode, urlWithId);
+                handleErrorResponse(statusCode, url);
             }
         } catch (IOException | ParseException e) {
             logger.error("Error fetching book from JavaEE app: {}", bookId, e);
@@ -92,21 +113,28 @@ public class BookService {
         return null;
     }
 
-    private Book processResponse(HttpEntityContainer response) throws IOException, ParseException {
+    private Book processGraphQLResponse(HttpEntityContainer response) throws IOException, ParseException {
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             String responseBody = EntityUtils.toString(entity);
-            logger.info("Successfully fetched book from JavaEE app.");
-            return objectMapper.readValue(responseBody, Book.class);
+            logger.info("Successfully fetched book from JavaEE app via GraphQL.");
+            // Parse the GraphQL response
+            JsonNode root = objectMapper.readTree(responseBody);
+            if (root.has("errors")) {
+                logger.error("GraphQL errors: {}", root.get("errors").toString());
+                return null;
+            }
+            JsonNode bookNode = root.path("data").path("book");
+            return objectMapper.treeToValue(bookNode, Book.class);
         }
         return null;
     }
 
-    private void handleErrorResponse(int statusCode, String urlWithId) {
+    private void handleErrorResponse(int statusCode, String url) {
         if (statusCode == 404) {
-            logger.info("Book not found in JavaEE app: {}", urlWithId);
+            logger.info("Book not found in JavaEE app: {}", url);
         } else {
-            logger.warn("Failed to fetch book from JavaEE app. Status: {}, URL: {}", statusCode, urlWithId);
+            logger.warn("Failed to fetch book from JavaEE app. Status: {}, URL: {}", statusCode, url);
         }
     }
 
@@ -120,6 +148,13 @@ public class BookService {
     private void validateBookId(String bookId) {
         if (bookId == null || bookId.trim().isEmpty()) {
             throw new IllegalArgumentException("Book ID cannot be null or empty");
+        }
+    }
+
+    @PreDestroy
+    public void cleanup() throws IOException {
+        if (httpClient != null) {
+            httpClient.close();
         }
     }
 }

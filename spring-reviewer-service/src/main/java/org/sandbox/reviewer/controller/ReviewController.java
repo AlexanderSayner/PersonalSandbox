@@ -29,18 +29,7 @@ public class ReviewController {
 
     @PostMapping("/test/{bookId}")
     public ResponseEntity<?> addReviewTest(@PathVariable String bookId, @RequestBody Review review) {
-        // Add your logic here
-        return ResponseEntity.ok("Review added for book ID: " + bookId);
-    }
-
-    @GetMapping("/get")
-    public ResponseEntity<?> testGet() {
-        return ResponseEntity.ok("test get");
-    }
-
-    @GetMapping("/get/param/{bookId}")
-    public ResponseEntity<?> getPath(@PathVariable String bookId) {
-        return ResponseEntity.ok("test get "+bookId);
+        return ResponseEntity.ok("Test route, got an id: " + bookId);
     }
 
     @PostMapping("/book/{bookId}")

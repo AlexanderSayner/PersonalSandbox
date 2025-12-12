@@ -2,7 +2,9 @@ package org.sandbox.reviewer.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     @JsonProperty("id")
     private Long id;
     

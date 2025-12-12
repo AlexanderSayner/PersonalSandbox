@@ -1,16 +1,14 @@
 package org.sandbox.reviewer.config.swagger;
 
-import org.springdoc.core.GroupedOpenApi;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public GroupedOpenApi api() {
-        return GroupedOpenApi.builder()
-                .group("api-v1")
-                .pathsToMatch("/**") // include all paths
-                .build();
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI().info(new Info().title("Book Reviewer API").version("1.0"));
     }
 }

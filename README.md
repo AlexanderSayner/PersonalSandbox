@@ -105,3 +105,33 @@ The application automatically creates the `books` table with the following struc
 - `title` (VARCHAR, NOT NULL)
 - `author` (VARCHAR, NOT NULL)
 - `year` (INTEGER)
+
+## Testing API
+Library service request:
+```
+POST http://localhost:8090/javaee-graphql-project/graphql
+
+mutation AddBook {
+    addBook(
+        input: { title: "The Great Gatsby", author: "F. Scott Fitzgerald", year: 1925 }
+    ) {
+        id
+        title
+        author
+        year
+    }
+}
+```
+Review service request:
+```
+POST http://localhost:8082/reviewer/api/reviews/book/1
+
+{
+    "id":11,
+    "bookId":1,
+    "reviewerName":"hooker",
+    "rating":5,
+    "comment":"connectario",
+    "timestamp":10000010010
+}
+```
