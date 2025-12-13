@@ -10,6 +10,7 @@ services:
       - "6543:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/create-databases.sql:/docker-entrypoint-initdb.d/create-databases.sql
     networks:
       - app-network
 
@@ -88,7 +89,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: rootpwd
     volumes:
       - mongodb_data:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./init-scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     networks:
       - app-network
     restart: unless-stopped
