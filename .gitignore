@@ -1,78 +1,101 @@
-# General
-*.log
-*.tmp
-*.swp
-.DS_Store
-
-# IDEs
-## IntelliJ IDEA
-.idea/
-*.iml
-*.iws
-*.ipr
-out/
-
-## Eclipse
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings/
-.springBeans
-.sts4-cache
-.metadata/
-bin/
-tmp/
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.loadpath
-.recommenders
-.externalToolBuilders/
-*.launch
-.cproject
-.factorypath
-.buildpath
-.sbteclipse
-.tern-project
-.texlipse
-.cache-main
-.scala_dependencies
-.worksheet
-
-## Netbeans
-nbproject/private/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-## Visual Studio Code
-.vscode/
-
-# Build tools
-## Gradle
+```
+# Gradle
 .gradle/
 build/
-!gradle-wrapper.jar
-gradletasknamecache
+!gradle/wrapper/gradle-wrapper.jar
 
-# Frameworks
-## Jakarta EE and Spring Boot
-.mvn/
-mvnw
-mvnw.cmd
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Kotlin
+*.kt.backup
+*.kotlin_metadata
+*.kotlin_built
 
-# Svelte
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.hprof
+
+# Dependencies
+lib/
+libs/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.vscode/
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Test coverage
+coverage/
+htmlcov/
+*.coverage
+
+# Package manager
 node_modules/
-dist/
+
+# Python (if co-existing)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Docker
+.dockerenv
+Dockerfile*
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Archives
+*.zip
+*.tar
+*.gz
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+```

@@ -14,6 +14,24 @@ services:
     networks:
       - app-network
 
+  bookshop-service:
+    build:
+      context: ./bookshop-service
+      dockerfile: Dockerfile
+    container_name: bookshop-service
+    ports:
+      - "8083:8080"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bookshopdb
+      - SPRING_DATASOURCE_USERNAME=libraryuser
+      - SPRING_DATASOURCE_PASSWORD=librarypass
+      - JAVAEE_SERVICE_ADDRESS=javaee-app:9090
+    networks:
+      - app-network
+    restart: unless-stopped
+
   javaee-app:
     build:
       context: ./javaee-graphql-project
@@ -21,7 +39,7 @@ services:
     container_name: javaee-graphql-app
     ports:
       - "8090:8080"
-      - "9990:9990"
+      - "9090:9090"
     depends_on:
       - postgres
     environment:

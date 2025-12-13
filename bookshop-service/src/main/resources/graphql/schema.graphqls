@@ -1,0 +1,135 @@
+# Schema definition for the Bookshop service
+scalar UUID
+scalar DateTime
+
+type Query {
+    # Product queries
+    products: [Product!]!
+    product(id: UUID!): Product
+    
+    # Order queries
+    orders: [Order!]!
+    order(id: UUID!): Order
+    
+    # OrderItem queries
+    orderItems: [OrderItem!]!
+    orderItem(id: UUID!): OrderItem
+    
+    # Book query that connects to Java EE service via gRPC
+    book(id: Int!): BookInfo
+}
+
+type Mutation {
+    # Product mutations
+    createProduct(input: CreateProductInput!): Product!
+    updateProduct(id: UUID!, input: UpdateProductInput!): Product
+    deleteProduct(id: UUID!): Boolean!
+    
+    # Order mutations
+    createOrder(input: CreateOrderInput!): Order!
+    updateOrder(id: UUID!, input: UpdateOrderInput!): Order
+    deleteOrder(id: UUID!): Boolean!
+    
+    # OrderItem mutations
+    createOrderItem(input: CreateOrderItemInput!): OrderItem!
+    updateOrderItem(id: UUID!, input: UpdateOrderItemInput!): OrderItem
+    deleteOrderItem(id: UUID!): Boolean!
+}
+
+# Input types for mutations
+input CreateProductInput {
+    title: String!
+    description: String
+    price: BigDecimal
+    productType: ProductType!
+    libraryBookId: UUID
+}
+
+input UpdateProductInput {
+    title: String
+    description: String
+    price: BigDecimal
+    productType: ProductType
+    libraryBookId: UUID
+}
+
+input CreateOrderInput {
+    userId: UUID!
+    status: OrderStatus!
+    totalAmount: BigDecimal!
+}
+
+input UpdateOrderInput {
+    userId: UUID
+    status: OrderStatus
+    totalAmount: BigDecimal
+}
+
+input CreateOrderItemInput {
+    orderId: UUID!
+    productId: UUID!
+    quantity: Int!
+    price: BigDecimal!
+}
+
+input UpdateOrderItemInput {
+    orderId: UUID
+    productId: UUID
+    quantity: Int
+    price: BigDecimal
+}
+
+# Type definitions
+type Product {
+    productId: UUID!
+    title: String!
+    description: String
+    price: BigDecimal
+    productType: ProductType!
+    libraryBookId: UUID
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type Order {
+    orderId: UUID!
+    userId: UUID!
+    status: OrderStatus!
+    totalAmount: BigDecimal!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type OrderItem {
+    orderItemId: UUID!
+    order: Order
+    product: Product
+    quantity: Int!
+    price: BigDecimal!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type BookInfo {
+    id: Int!
+    title: String!
+    author: String!
+    year: Int!
+}
+
+# Enum definitions
+enum ProductType {
+    BOOK
+    DIGITAL_BOOK
+    PHYSICAL_GOOD
+    DIGITAL_GOOD
+}
+
+enum OrderStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
+}
+
+# Scalar type for BigDecimal
+scalar BigDecimal
