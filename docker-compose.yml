@@ -89,7 +89,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: rootpwd
     volumes:
       - mongodb_data:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./init-scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     networks:
       - app-network
     restart: unless-stopped

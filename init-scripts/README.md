@@ -1,12 +1,14 @@
-# PostgreSQL Initialization Scripts
+# Init scripts
+
+## PostgreSQL Initialization Script
 
 This directory contains initialization scripts for the PostgreSQL container.
 
-## Files
+### Files
 
 - `create-databases.sql` - Creates additional databases alongside the default `librarydb`
 
-## Databases Created
+### Databases Created
 
 During container initialization, the following databases are created:
 
@@ -18,3 +20,9 @@ During container initialization, the following databases are created:
 - `notificationdb`
 
 All databases are accessible using the same credentials (libraryuser/librarypass).
+
+## MongoDB Initialization Script
+
+- `init-mongo.js` - Creates a database and required user for reviewer service
+
+By running this script `reviewerdb` will be created and granted for `revieweruser` 
