@@ -14,29 +14,33 @@ repositories {
 
 dependencies {
     // Jakarta EE API
-    compileOnly 'jakarta.platform:jakarta.jakartaee-api:10.0.0'
-    
-    // SmallRye GraphQL (MicroProfile GraphQL implementation)
-    implementation 'io.smallrye:smallrye-graphql:1.8.2'
-    
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:11.0.0'
+
+    // GraphQL Java Servlet for creating the GraphQL endpoint
+    implementation 'com.graphql-java-kickstart:graphql-java-servlet:16.0.0'
+
     // JSON-P for JSON processing
     implementation 'jakarta.json:jakarta.json-api:2.1.2'
-    
+
     // JPA API
     implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
-    
+
     // JTA API
     implementation 'jakarta.transaction:jakarta.transaction-api:2.0.1'
-    
+
     // PostgreSQL JDBC Driver
-    implementation 'org.postgresql:postgresql:42.6.0'
-    
+    implementation 'org.postgresql:postgresql:42.7.7'
+
     // Hibernate Core (JPA Implementation)
     implementation 'org.hibernate:hibernate-core:6.2.7.Final'
-    
+
     // JUnit for testing
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    
+    // Mockito for testing
+    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.11.0'
 }
 
 test {

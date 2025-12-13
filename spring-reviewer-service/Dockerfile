@@ -3,11 +3,13 @@ FROM gradle:8.14.3-jdk17 AS build
 WORKDIR /app
 COPY build.gradle settings.gradle ./
 COPY src/ src/
-RUN gradle clean build -Dorg.gradle.jvmargs=-Xmx1g
+RUN gradle clean build -Dorg.gradle.jvmargs=-Xmx1g --info
 
 # Runtime stage
-FROM tomcat:9.0.65-jre17
+FROM tomcat:11.0.15-jre17
 WORKDIR /app
+
+# Copy the built WAR file from the build stage
 COPY --from=build /app/build/libs/reviewer-service-1.0.0.war /usr/local/tomcat/webapps/reviewer.war
 
 # Expose port
