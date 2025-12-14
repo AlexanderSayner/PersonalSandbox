@@ -144,6 +144,27 @@ services:
       - GRPC_CLIENT_BOOKSHOP_SERVICE_ADDRESS=static://bookshop-service:9090
     restart: on-failure
 
+  # Pricing Service
+  pricing-service:
+    build:
+      context: ./pricing-service
+      dockerfile: Dockerfile
+    container_name: pricing-service
+    ports:
+      - "8085:8085"
+      - "9091:9091"
+    depends_on:
+      - postgres
+      - bookshop-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/pricingdb
+      - SPRING_DATASOURCE_USERNAME=libraryuser
+      - SPRING_DATASOURCE_PASSWORD=librarypass
+      - GRPC_CLIENT_BOOKSHOP_SERVICE_ADDRESS=static://bookshop-service:9090
+    networks:
+      - app-network
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   mongodb_data:

@@ -1,0 +1,29 @@
+package org.sandbox.pricing.controller
+
+import kotlinx.coroutines.runBlocking
+import org.sandbox.pricing.dto.PricingRequest
+import org.sandbox.pricing.dto.PricingResponse
+import org.sandbox.pricing.service.PricingService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.web.bind.annotation.*
+import java.math.BigDecimal
+
+@RestController
+@RequestMapping("/api/v1/pricing")
+@Tag(name = "Pricing API", description = "API for calculating product pricing with delivery costs")
+class PricingController(
+    private val pricingService: PricingService
+) {
+
+    @PostMapping("/calculate")
+    @Operation(summary = "Calculate pricing", description = "Calculates the total price including delivery cost based on distance and weight")
+    fun calculatePricing(@RequestBody pricingRequest: PricingRequest): PricingResponse = runBlocking {
+        pricingService.calculatePricing(pricingRequest)
+    }
+
+    @GetMapping("/health")
+    fun health(): String {
+        return "Pricing service is running"
+    }
+}
