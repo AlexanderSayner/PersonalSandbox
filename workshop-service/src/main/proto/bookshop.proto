@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package bookshop;
+
+option java_multiple_files = true;
+option java_package = "org.sandbox.bookshop.grpc";
+option java_outer_classname = "BookshopProto";
+
+service ProductService {
+  rpc ValidateProduct(ValidateProductRequest) returns (ValidateProductResponse);
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse);
+}
+
+message ValidateProductRequest {
+  string product_id = 1;
+}
+
+message ValidateProductResponse {
+  bool valid = 1;
+  string message = 2;
+}
+
+message GetProductRequest {
+  string product_id = 1;
+}
+
+message GetProductResponse {
+  bool found = 1;
+  Product product = 2;
+}
+
+message Product {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  double price = 4;
+  string category = 5;
+}
