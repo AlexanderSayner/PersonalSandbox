@@ -1,4 +1,4 @@
-package com.bookshop.entity
+package org.sandbox.bookshop.entity
 
 import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator

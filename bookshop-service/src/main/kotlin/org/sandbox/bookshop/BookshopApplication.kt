@@ -1,4 +1,4 @@
-package com.bookshop
+package org.sandbox.bookshop
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

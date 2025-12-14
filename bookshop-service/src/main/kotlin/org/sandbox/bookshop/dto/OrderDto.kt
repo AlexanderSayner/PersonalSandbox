@@ -1,4 +1,4 @@
-package com.bookshop.dto
+package org.sandbox.bookshop.dto
 
 import java.math.BigDecimal
 import java.util.*

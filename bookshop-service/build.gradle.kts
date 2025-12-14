@@ -1,88 +1,91 @@
+import com.google.protobuf.gradle.id
+
 plugins {
-    id("org.springframework.boot") version "3.2.0"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.spring") version "1.9.20"
-    kotlin("plugin.jpa") version "1.9.20"
-    kotlin("plugin.allopen") version "1.9.20"
-    kotlin("plugin.noarg") version "1.9.20"
-    id("com.google.protobuf") version "0.9.4"
+	kotlin("jvm") version "2.2.21"
+	kotlin("plugin.spring") version "2.2.21"
+	id("org.springframework.boot") version "4.0.0"
+	id("io.spring.dependency-management") version "1.1.7"
+	id("com.google.protobuf") version "0.9.5"
+	id("org.asciidoctor.jvm.convert") version "4.0.5"
 }
 
-group = "com.bookshop"
+group = "org.sandbox.bookshop"
 version = "0.0.1-SNAPSHOT"
+description = "Demo project for Spring Boot"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(24)
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
+extra["snippetsDir"] = file("build/generated-snippets")
+extra["springGrpcVersion"] = "1.0.0"
+
 dependencies {
-    // Spring Boot Starter Dependencies
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    
-    // Kotlin dependencies
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    
-    // GraphQL dependencies
-    implementation("org.springframework.boot:spring-boot-starter-graphql")
-    implementation("com.graphql-java:graphql-java")
-    
-    // Database dependencies
-    implementation("org.postgresql:postgresql")
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    
-    // Flyway for database migrations
-    implementation("org.flywaydb:flyway-core")
-    implementation("org.flywaydb:flyway-database-postgresql")
-    
-    // gRPC dependencies
-    implementation("net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE")
-    implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")
-    implementation("io.grpc:grpc-protobuf:1.59.0")
-    implementation("io.grpc:grpc-stub:1.59.0")
-    implementation("com.google.protobuf:protobuf-java:3.25.1")
-    
-    // Spring Doc OpenAPI for GraphQL UI
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
-    
-    // Testing dependencies
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.graphql:test")
+	implementation("org.springframework.boot:spring-boot-starter-cassandra")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-flyway")
+	implementation("org.springframework.boot:spring-boot-starter-graphql")
+	implementation("io.grpc:grpc-services")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+	implementation("tools.jackson.module:jackson-module-kotlin")
+	testImplementation("org.springframework.boot:spring-boot-restdocs")
+	testImplementation("org.springframework.boot:spring-boot-starter-cassandra-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-graphql-test")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testImplementation("org.springframework.grpc:spring-grpc-test")
+	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.grpc:spring-grpc-dependencies:${property("springGrpcVersion")}")
+	}
+}
+
+kotlin {
+	compilerOptions {
+		freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
+	}
+}
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc"
+	}
+	plugins {
+		id("grpc") {
+			artifact = "io.grpc:protoc-gen-grpc-java"
+		}
+	}
+	generateProtoTasks {
+		all().forEach {
+			it.plugins {
+				id("grpc") {
+					option("@generated=omit")
+				}
+			}
+		}
+	}
 }
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
 
-allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.Embeddable")
-    annotation("javax.persistence.MappedSuperclass")
+tasks.test {
+	outputs.dir(project.extra["snippetsDir"]!!)
 }
 
-// Configure protobuf plugin
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.25.1"
-    }
-    plugins {
-        id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.59.0"
-        }
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.plugins {
-                id("grpc")
-            }
-        }
-    }
+tasks.asciidoctor {
+	inputs.dir(project.extra["snippetsDir"]!!)
+	dependsOn(tasks.test)
 }
