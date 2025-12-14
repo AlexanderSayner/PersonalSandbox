@@ -21,14 +21,13 @@ class KafkaConfig {
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
-        
         return DefaultKafkaConsumerFactory(props)
     }
 
     @Bean
     fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
         val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
-        factory.consumerFactory = consumerFactory()
+//TODO:        factory.consumerFactory = consumerFactory()
         return factory
     }
 }

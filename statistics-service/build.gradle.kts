@@ -1,38 +1,54 @@
 plugins {
-    id("org.springframework.boot") version "3.2.0"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.22"
-    kotlin("plugin.spring") version "1.9.22"
-    kotlin("plugin.jpa") version "1.9.22"
+	kotlin("jvm") version "2.2.21"
+	kotlin("plugin.spring") version "2.2.21"
+	id("org.springframework.boot") version "4.0.0"
+	id("io.spring.dependency-management") version "1.1.7"
+	kotlin("plugin.jpa") version "2.2.21"
 }
 
 group = "org.sandbox"
 version = "0.0.1-SNAPSHOT"
+description = "Statistics project on Spring Boot"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(24)
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.kafka:spring-kafka")
-    implementation("com.clickhouse:clickhouse-jdbc:0.5.0")
-    implementation("com.graphql-java:graphql-java:2023-04-04T07-05-22-9eae9c1")
-    implementation("com.graphql-java:graphql-java-servlet:2023-04-04T07-05-22-9eae9c1")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("io.micrometer:micrometer-core")
-    implementation("io.micrometer:micrometer-registry-prometheus")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-graphql")
+	implementation("org.springframework.boot:spring-boot-starter-kafka")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("tools.jackson.module:jackson-module-kotlin")
+	implementation("com.clickhouse:clickhouse-jdbc:0.9.4")
+	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-graphql-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-kafka-test")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+kotlin {
+	compilerOptions {
+		freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
+	}
+}
+
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.MappedSuperclass")
+	annotation("jakarta.persistence.Embeddable")
 }
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }

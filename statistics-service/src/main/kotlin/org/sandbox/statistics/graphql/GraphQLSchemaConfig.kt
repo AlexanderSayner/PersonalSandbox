@@ -38,32 +38,33 @@ class GraphQLSchemaConfig {
         """.trimIndent()
 
         val typeRegistry = graphql.schema.idl.SchemaParser().parse(schemaString)
-        val runtimeWiring = RuntimeWiring.newRuntimeWiring()
-            .type("Query") { builder ->
-                builder
-                    .dataFetcher("salesStatistics") { environment -> 
-                        environment.getContext<GraphQLContext>().getSalesStatistics() 
-                    }
-                    .dataFetcher("userActivities") { environment -> 
-                        environment.getContext<GraphQLContext>().getUserActivities() 
-                    }
-                    .dataFetcher("salesByProduct") { environment -> 
-                        val productId = environment.getArgument<String>("productId")
-                        environment.getContext<GraphQLContext>().getSalesByProduct(productId) 
-                    }
-                    .dataFetcher("activitiesByUser") { environment -> 
-                        val userId = environment.getArgument<String>("userId")
-                        environment.getContext<GraphQLContext>().getActivitiesByUser(userId) 
-                    }
-                    .dataFetcher("salesByDateRange") { environment -> 
-                        val startDate = environment.getArgument<String>("startDate")
-                        val endDate = environment.getArgument<String>("endDate")
-                        environment.getContext<GraphQLContext>().getSalesByDateRange(startDate, endDate) 
-                    }
-            }
-            .build()
+//        val runtimeWiring = RuntimeWiring.newRuntimeWiring()
+//            .type("Query") { builder ->
+//                builder
+//                    .dataFetcher("salesStatistics") { environment ->
+//                        environment.getContext<GraphQLContext>().getSalesStatistics()
+//                    }
+//                    .dataFetcher("userActivities") { environment ->
+//                        environment.getContext<GraphQLContext>().getUserActivities()
+//                    }
+//                    .dataFetcher("salesByProduct") { environment ->
+//                        val productId = environment.getArgument<String>("productId")
+//                        environment.getContext<GraphQLContext>().getSalesByProduct(productId)
+//                    }
+//                    .dataFetcher("activitiesByUser") { environment ->
+//                        val userId = environment.getArgument<String>("userId")
+//                        environment.getContext<GraphQLContext>().getActivitiesByUser(userId)
+//                    }
+//                    .dataFetcher("salesByDateRange") { environment ->
+//                        val startDate = environment.getArgument<String>("startDate")
+//                        val endDate = environment.getArgument<String>("endDate")
+//                        environment.getContext<GraphQLContext>().getSalesByDateRange(startDate, endDate)
+//                    }
+//            }
+//            .build()
 
         val schemaGenerator = SchemaGenerator()
-        return schemaGenerator.makeExecutableSchema(typeRegistry, runtimeWiring)
+//        return schemaGenerator.makeExecutableSchema(typeRegistry, runtimeWiring)
+        TODO()
     }
 }

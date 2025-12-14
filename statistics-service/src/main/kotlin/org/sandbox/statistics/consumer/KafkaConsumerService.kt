@@ -1,6 +1,5 @@
 package org.sandbox.statistics.consumer
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.sandbox.statistics.entity.SalesStatisticsEntity
 import org.sandbox.statistics.entity.UserActivityEntity
 import org.sandbox.statistics.repository.SalesStatisticsRepository
@@ -8,6 +7,7 @@ import org.sandbox.statistics.repository.UserActivityRepository
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
+import tools.jackson.databind.ObjectMapper
 import java.math.BigDecimal
 import java.util.*
 
@@ -21,7 +21,7 @@ class KafkaConsumerService(
     private val logger = LoggerFactory.getLogger(KafkaConsumerService::class.java)
 
     @KafkaListener(topics = ["workshop-sales"], groupId = "statistics-group")
-    fun consumeSalesData(saleData: String) {
+    suspend fun consumeSalesData(saleData: String) {
         try {
             logger.info("Received sales data: $saleData")
             val sale = objectMapper.readValue(saleData, SaleEvent::class.java)
@@ -41,7 +41,7 @@ class KafkaConsumerService(
     }
 
     @KafkaListener(topics = ["workshop-user-activity"], groupId = "statistics-group")
-    fun consumeUserActivityData(activityData: String) {
+    suspend fun consumeUserActivityData(activityData: String) {
         try {
             logger.info("Received user activity data: $activityData")
             val activity = objectMapper.readValue(activityData, UserActivityEvent::class.java)

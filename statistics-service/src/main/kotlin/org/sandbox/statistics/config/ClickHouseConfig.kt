@@ -1,22 +1,31 @@
 package org.sandbox.statistics.config
 
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.jdbc.repository.config.AbstractJdbcConfiguration
-import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.datasource.DriverManagerDataSource
 import javax.sql.DataSource
 
 @Configuration
-@EnableJdbcRepositories(basePackages = ["org.sandbox.statistics.repository"])
-class ClickHouseConfig : AbstractJdbcConfiguration() {
+class ClickHouseConfig {
 
-    override fun dataSource(): DataSource {
-        val dataSource = DriverManagerDataSource()
-        dataSource.setDriverClassName("com.clickhouse.jdbc.ClickHouseDriver")
-        dataSource.url = System.getenv("CLICKHOUSE_URL") ?: "jdbc:clickhouse://localhost:8123/default"
-        dataSource.username = System.getenv("CLICKHOUSE_USER") ?: "default"
-        dataSource.password = System.getenv("CLICKHOUSE_PASSWORD") ?: ""
-        return dataSource
+    @Value($$"${spring.datasource.url}")
+    private lateinit var clickhouseUrl: String
+
+    @Value($$"${spring.datasource.username}")
+    private lateinit var clickhouseUser: String
+
+    @Value($$"${spring.datasource.password}")
+    private lateinit var clickhousePassword: String
+
+    @Bean
+    fun clickHouseDataSource(): DataSource {
+        return DriverManagerDataSource(clickhouseUrl, clickhouseUser, clickhousePassword)
+    }
+
+    @Bean
+    fun clickHouseJdbcTemplate(dataSource: DataSource): JdbcTemplate {
+        return JdbcTemplate(dataSource)
     }
 }
