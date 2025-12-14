@@ -5,20 +5,6 @@ import java.math.BigDecimal
 import java.util.*
 
 @Entity
-@Table(name = "delivery_methods")
-data class DeliveryMethod(
-    @Id
-    @Column(name = "method_id")
-    val methodId: UUID? = UUID.randomUUID(),
-    
-    @Column(name = "name", nullable = false)
-    var name: String = "",
-    
-    @Column(name = "description")
-    var description: String? = null
-)
-
-@Entity
 @Table(name = "pricing_rules")
 data class PricingRule(
     @Id

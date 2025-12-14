@@ -1,25 +1,21 @@
 package org.sandbox.pricing.service
 
-import kotlinx.coroutines.coroutineScope
 import org.sandbox.pricing.client.BookshopGrpcClient
 import org.sandbox.pricing.dto.PricingRequest
 import org.sandbox.pricing.dto.PricingResponse
-import org.sandbox.pricing.entity.DeliveryMethod
-import org.sandbox.pricing.entity.PricingRule
 import org.sandbox.pricing.repository.DeliveryMethodRepository
 import org.sandbox.pricing.repository.PricingRuleRepository
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import java.util.*
 
 @Service
 class PricingService(
-    private val bookshopGrpcClient: BookshopGrpcClient,
-    private val pricingRuleRepository: PricingRuleRepository,
-    private val deliveryMethodRepository: DeliveryMethodRepository
+    val bookshopGrpcClient: BookshopGrpcClient,
+    val pricingRuleRepository: PricingRuleRepository,
+    val deliveryMethodRepository: DeliveryMethodRepository
 ) {
-
-    suspend fun calculatePricing(pricingRequest: PricingRequest): PricingResponse = coroutineScope {
+    // TODO: support coroutines
+    suspend fun calculatePricing(pricingRequest: PricingRequest): PricingResponse/* = coroutineScope*/ {
         // Get the base product price from the bookshop service
         val basePrice = bookshopGrpcClient.getProductPrice(pricingRequest.productId).toBigDecimal()
 
@@ -30,7 +26,7 @@ class PricingService(
         val totalWithDelivery = basePrice.add(deliveryCost)
         val totalWithoutDelivery = basePrice
 
-        PricingResponse(
+        return PricingResponse(
             productId = pricingRequest.productId,
             basePrice = basePrice,
             deliveryCost = deliveryCost,
@@ -53,15 +49,16 @@ class PricingService(
         }
 
         // Find the pricing rule that applies based on distance and weight
-        val applicableRules = pricingRuleRepository.findByMethodIdAndMinDistanceLessThanEqualAndMaxDistanceGreaterThanEqual(
-            deliveryMethod.methodId,
-            pricingRequest.distance,
-            pricingRequest.distance
-        ).filter { rule ->
-            if (rule.minWeight != null && rule.maxWeight != null) {
-                pricingRequest.weight >= rule.minWeight && pricingRequest.weight <= rule.maxWeight
-            } else true
-        }
+        val applicableRules =
+            pricingRuleRepository.findByMethodIdAndMinDistanceLessThanEqualAndMaxDistanceGreaterThanEqual(
+                deliveryMethod.methodId,
+                pricingRequest.distance,
+                pricingRequest.distance
+            ).filter { rule ->
+                if (rule.minWeight != null && rule.maxWeight != null) {
+                    pricingRequest.weight >= rule.minWeight && pricingRequest.weight <= rule.maxWeight
+                } else true
+            }
 
         return if (applicableRules.isNotEmpty()) {
             // Return the cost of the first matching rule (you might want more sophisticated logic here)
