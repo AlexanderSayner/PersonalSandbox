@@ -1,63 +1,94 @@
+import com.google.protobuf.gradle.id
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
-    id("org.springframework.boot") version "3.2.0"
-    id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.spring") version "1.9.20"
-    kotlin("plugin.jpa") version "1.9.20"
-    id("com.google.protobuf") version "0.9.4"
-    id("org.jlleitschuh.gradle.ktlint") version "11.5.1"
+    kotlin("jvm") version "2.2.21"
+    kotlin("plugin.spring") version "2.2.21"
+    id("org.springframework.boot") version "4.0.0"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("com.google.protobuf") version "0.9.5"
+    id("org.asciidoctor.jvm.convert") version "4.0.5"
 }
 
 group = "org.sandbox"
 version = "0.0.1-SNAPSHOT"
+description = "Demo project for Spring Boot"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
 }
 
 repositories {
     mavenCentral()
 }
 
+extra["snippetsDir"] = file("build/generated-snippets")
+extra["springGrpcVersion"] = "1.0.0"
+
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-data-cassandra")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
+    implementation("org.springframework.boot:spring-boot-starter-cassandra")
+    implementation("org.springframework.data:spring-data-cassandra")
+    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
+    implementation("io.grpc:grpc-services")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    
-    // gRPC dependencies
-    implementation("net.devh:grpc-client-spring-boot-starter:2.14.0.RELEASE")
-    implementation("io.grpc:grpc-protobuf:1.59.0")
-    implementation("io.grpc:grpc-stub:1.59.0")
-    implementation("com.google.protobuf:protobuf-java:3.25.1")
-    
-    // OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
-    
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.grpc:spring-grpc-server-web-spring-boot-starter")
+    implementation("tools.jackson.module:jackson-module-kotlin")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+    testImplementation("org.springframework.boot:spring-boot-restdocs")
+    testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-cassandra-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.springframework.grpc:spring-grpc-test")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.grpc:spring-grpc-dependencies:${property("springGrpcVersion")}")
+    }
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc"
+    }
+    plugins {
+        id("grpc") {
+            artifact = "io.grpc:protoc-gen-grpc-java"
+        }
+    }
+    generateProtoTasks {
+        all().forEach {
+            it.plugins {
+                id("grpc") {
+                    option("@generated=omit")
+                }
+            }
+        }
+    }
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-// Configure Protobuf plugin for gRPC
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.25.1"
-    }
-    plugins {
-        id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.59.0"
-        }
-    }
-    generateProtoTasks {
-        ofSourceSet("main").forEach {
-            it.plugins {
-                id("grpc")
-            }
-        }
-    }
+tasks.test {
+    outputs.dir(project.extra["snippetsDir"]!!)
+}
+
+tasks.asciidoctor {
+    inputs.dir(project.extra["snippetsDir"]!!)
+    dependsOn(tasks.test)
 }
