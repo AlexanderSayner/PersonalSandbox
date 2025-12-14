@@ -27,6 +27,7 @@ extra["snippetsDir"] = file("build/generated-snippets")
 extra["springGrpcVersion"] = "1.0.0"
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-flyway")
 	implementation("org.springframework.boot:spring-boot-starter-graphql")
@@ -34,6 +35,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
 	implementation("tools.jackson.module:jackson-module-kotlin")
+	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	testImplementation("org.springframework.boot:spring-boot-restdocs")
 	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-graphql-test")
