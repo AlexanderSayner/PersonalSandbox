@@ -1,0 +1,31 @@
+package org.sandbox.pricing.entity
+
+import jakarta.persistence.*
+import java.math.BigDecimal
+import java.util.*
+
+@Entity
+@Table(name = "pricing_rules")
+data class PricingRule(
+    @Id
+    @Column(name = "rule_id")
+    val ruleId: UUID? = UUID.randomUUID(),
+    
+    @Column(name = "method_id", nullable = false)
+    var methodId: UUID? = null,
+    
+    @Column(name = "min_distance")
+    var minDistance: Int? = null,
+    
+    @Column(name = "max_distance")
+    var maxDistance: Int? = null,
+    
+    @Column(name = "min_weight", precision = 10, scale = 3)
+    var minWeight: BigDecimal? = null,
+    
+    @Column(name = "max_weight", precision = 10, scale = 3)
+    var maxWeight: BigDecimal? = null,
+    
+    @Column(name = "cost", precision = 12, scale = 2, nullable = false)
+    var cost: BigDecimal? = null
+)

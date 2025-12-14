@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package org.sandbox.bookshop;
+
+option java_multiple_files = true;
+option java_package = "org.sandbox.grpc.bookshop";
+option java_outer_classname = "BookshopProto";
+
+// Service definition for Bookshop service
+service BookshopService {
+  rpc GetProductPrice(GetProductPriceRequest) returns (GetProductPriceResponse);
+}
+
+// Request message for getting product price
+message GetProductPriceRequest {
+  string product_id = 1;
+}
+
+// Response message for getting product price
+message GetProductPriceResponse {
+  double price = 1;
+  string currency = 2;
+  string product_name = 3;
+}

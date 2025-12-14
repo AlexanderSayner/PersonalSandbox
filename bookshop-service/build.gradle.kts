@@ -11,7 +11,7 @@ plugins {
 
 group = "org.sandbox.bookshop"
 version = "0.0.1-SNAPSHOT"
-description = "Demo project for Spring Boot"
+description = "Bookshop project on Spring Boot"
 
 java {
 	toolchain {
