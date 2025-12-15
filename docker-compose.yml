@@ -219,6 +219,26 @@ services:
       - app-network
     restart: unless-stopped
 
+  # User Service
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/userdb
+      - SPRING_DATASOURCE_USERNAME=libraryuser
+      - SPRING_DATASOURCE_PASSWORD=librarypass
+      - JWT_SECRET=mySecretKeyMustBeLongerThan256BitsForHS512Algorithm
+      - JWT_EXPIRATION=86400000
+    networks:
+      - app-network
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   mongodb_data:
