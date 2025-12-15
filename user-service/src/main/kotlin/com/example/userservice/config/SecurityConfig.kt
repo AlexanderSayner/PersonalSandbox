@@ -1,5 +1,7 @@
 package com.example.userservice.config
 
+import com.example.userservice.security.JwtAuthenticationEntryPoint
+import com.example.userservice.security.JwtRequestFilter
 import com.example.userservice.service.UserService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

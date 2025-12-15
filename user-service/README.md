@@ -1,6 +1,6 @@
 # User Service
 
-A Gradle Kotlin Spring Boot 4 service for storing, registration and authenticating users with PostgreSQL userdb. This service provides user management functionality with JWT-based authentication and role-based authorization.
+A Gradle Kotlin Spring Boot 3 service for storing, registration and authenticating users with PostgreSQL userdb. This service provides user management functionality with JWT-based authentication and role-based authorization.
 
 ## Features
 

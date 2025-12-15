@@ -55,7 +55,7 @@ class UserService(
             .accountExpired(false)
             .accountLocked(false)
             .credentialsExpired(false)
-            .enabled(true)
+            .disabled(false)
             .build()
     }
 
