@@ -21,7 +21,6 @@ services:
     container_name: javaee-graphql-app
     ports:
       - "8090:8080"
-      - "9990:9990"
     depends_on:
       - postgres
     environment:
