@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM openjdk:24-ea-24-bookworm
 
 WORKDIR /app
 

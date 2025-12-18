@@ -1,9 +1,8 @@
-FROM openjdk:17-jdk-slim
+# Build stage
+#FROM gradle:9.2.1-jdk25 AS build
+FROM gradle:8.14.3-jdk24-graal AS build
 
-# Install curl for health checks
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
+WORKDIR /opt/app
 
 # Copy the gradle wrapper files
 COPY gradlew .
@@ -20,28 +19,27 @@ COPY settings.gradle.kts .
 COPY src/ ./src/
 
 # Build the application
-RUN ./gradlew build -xmx2g
+RUN gradle wrapper
+RUN ./gradlew bootJar
 
 # Extract the fat jar (or create a layered jar structure)
 RUN java -Djarmode=layertools -jar build/libs/*.jar extract
 
-# Create a lightweight runtime image
-FROM openjdk:17-jre-slim
+# Runtime stage
+#FROM openjdk:25-ea-25-bookworm
+FROM openjdk:24-ea-24-bookworm
 
-WORKDIR /app
-
-# Install curl for health checks
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+WORKDIR /opt/app
 
 # Copy layers from the builder stage
-COPY --from=0 /app/dependencies/ ./
-COPY --from=0 /app/spring-boot-loader/ ./
-COPY --from=0 /app/snapshot-dependencies/ ./
-COPY --from=0 /app/application/ ./
+COPY --from=build /opt/app/dependencies/ ./
+COPY --from=build /opt/app/spring-boot-loader/ ./
+COPY --from=build /opt/app/snapshot-dependencies/ ./
+COPY --from=build /opt/app/application/ ./
 
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8080/actuator/health || exit 1
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

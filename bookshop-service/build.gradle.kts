@@ -89,3 +89,20 @@ tasks.asciidoctor {
 	inputs.dir(project.extra["snippetsDir"]!!)
 	dependsOn(tasks.test)
 }
+
+//application {
+//    mainClass.set("org.sandbox.bookshop.BookshopApplication")
+//}
+
+// Source - https://stackoverflow.com/a
+// Posted by Stanislav, modified by community. See post 'Timeline' for change history
+// Retrieved 2025-12-18, License - CC BY-SA 4.0
+
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "org.sandbox.bookshop.BookshopApplication",
+            "Class-Path" to configurations.runtimeClasspath.get().files.joinToString(" ") { it.name }
+        )
+    }
+}

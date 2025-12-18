@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-alpine
+FROM amazoncorretto:25-alpine
 RUN apk add --no-cache libc6-compat
 RUN addgroup -g 1001 -S spring && adduser -u 1001 -S spring -G spring
 USER 1001:1001

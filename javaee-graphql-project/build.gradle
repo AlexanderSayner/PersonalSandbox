@@ -4,7 +4,7 @@ plugins {
     id 'org.unbroken-dome.xjc' version '2.0.0' // For JAXB code generation if needed
 }
 
-group = 'com.example'
+group = 'org.sandbox.graphql'
 version = '1.0.0'
 sourceCompatibility = '17'
 
