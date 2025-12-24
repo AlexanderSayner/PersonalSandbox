@@ -2,6 +2,7 @@ package org.sandbox.statistics.config
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.EnableKafka
@@ -25,9 +26,10 @@ class KafkaConfig {
     }
 
     @Bean
-    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
-        val factory = ConcurrentKafkaListenerContainerFactory<String, String>()
-//TODO:        factory.consumerFactory = consumerFactory()
-        return factory
+    @ConditionalOnMissingBean
+    fun kafkaListenerContainerFactory(consumerFactory: ConsumerFactory<String, String>): ConcurrentKafkaListenerContainerFactory<String, String> {
+        return ConcurrentKafkaListenerContainerFactory<String, String>().apply {
+            setConsumerFactory(consumerFactory)
+        }
     }
 }
