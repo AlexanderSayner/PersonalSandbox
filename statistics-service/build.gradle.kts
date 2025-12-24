@@ -54,3 +54,12 @@ allOpen {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+tasks.jar {
+    manifest {
+        attributes(
+            "Main-Class" to "org.sandbox.statistics.StatisticsApplication",
+            "Class-Path" to configurations.runtimeClasspath.get().files.joinToString(" ") { it.name }
+        )
+    }
+}
