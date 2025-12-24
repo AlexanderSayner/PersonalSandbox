@@ -3,7 +3,7 @@ import com.google.protobuf.gradle.id
 plugins {
     kotlin("jvm") version "2.2.21"
     kotlin("plugin.spring") version "2.2.21"
-    id("org.springframework.boot") version "4.0.0"
+    id("org.springframework.boot") version "4.0.1"
     id("io.spring.dependency-management") version "1.1.7"
     id("com.google.protobuf") version "0.9.5"
     id("org.asciidoctor.jvm.convert") version "4.0.5"
@@ -25,18 +25,20 @@ repositories {
 
 extra["snippetsDir"] = file("build/generated-snippets")
 extra["springGrpcVersion"] = "1.0.0"
+val flywayVersion = "11.20.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.flywaydb:flyway-core")
-    implementation("org.postgresql:postgresql")
+    implementation("org.springframework.boot:spring-boot-starter-flyway")
+    implementation("org.flywaydb:flyway-core:${flywayVersion}")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 
     // gRPC dependencies
     implementation("io.grpc:grpc-services")
     implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+
 //    implementation("net.devh:grpc-server-spring-boot-starter:3.0.0.M2")
 //    implementation("net.devh:grpc-client-spring-boot-starter:3.0.0.M2")
 //    implementation("io.grpc:grpc-protobuf:1.60.0")
@@ -48,6 +50,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    runtimeOnly("org.flywaydb:flyway-database-postgresql:${flywayVersion}")
+    runtimeOnly("org.postgresql:postgresql")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
