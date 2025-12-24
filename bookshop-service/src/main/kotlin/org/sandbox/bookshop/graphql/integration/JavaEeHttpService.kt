@@ -1,8 +1,9 @@
 package org.sandbox.bookshop.graphql.integration
 
 import com.bookshop.grpc.BookInfo
+import org.springframework.stereotype.Service
 
-
+@Service
 class JavaEeHttpService {
     fun getBookById(id: Int): BookInfo {
         //TODO

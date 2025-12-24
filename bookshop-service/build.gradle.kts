@@ -3,7 +3,7 @@ import com.google.protobuf.gradle.id
 plugins {
 	kotlin("jvm") version "2.2.21"
 	kotlin("plugin.spring") version "2.2.21"
-	id("org.springframework.boot") version "4.0.0"
+	id("org.springframework.boot") version "4.0.1"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("com.google.protobuf") version "0.9.5"
 	id("org.asciidoctor.jvm.convert") version "4.0.5"
@@ -25,16 +25,22 @@ repositories {
 
 extra["snippetsDir"] = file("build/generated-snippets")
 extra["springGrpcVersion"] = "1.0.0"
+val flywayVersion = "11.20.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-flyway")
-	implementation("org.springframework.boot:spring-boot-starter-graphql")
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
+    runtimeOnly("org.flywaydb:flyway-database-postgresql:$flywayVersion")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-graphql")
+    implementation("com.graphql-java:graphql-java-extended-scalars:24.0")
 	implementation("io.grpc:grpc-services")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
 	implementation("tools.jackson.module:jackson-module-kotlin")
+    runtimeOnly("org.postgresql:postgresql")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	testImplementation("org.springframework.boot:spring-boot-restdocs")
 	testImplementation("org.springframework.boot:spring-boot-starter-flyway-test")
@@ -89,14 +95,6 @@ tasks.asciidoctor {
 	inputs.dir(project.extra["snippetsDir"]!!)
 	dependsOn(tasks.test)
 }
-
-//application {
-//    mainClass.set("org.sandbox.bookshop.BookshopApplication")
-//}
-
-// Source - https://stackoverflow.com/a
-// Posted by Stanislav, modified by community. See post 'Timeline' for change history
-// Retrieved 2025-12-18, License - CC BY-SA 4.0
 
 tasks.jar {
     manifest {
