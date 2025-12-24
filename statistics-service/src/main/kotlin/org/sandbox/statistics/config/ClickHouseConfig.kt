@@ -10,13 +10,13 @@ import javax.sql.DataSource
 @Configuration
 class ClickHouseConfig {
 
-    @Value($$"${spring.datasource.url}")
+    @Value("${clickhouse.url:jdbc:clickhouse://localhost:8123/default}")
     private lateinit var clickhouseUrl: String
 
-    @Value($$"${spring.datasource.username}")
+    @Value("${clickhouse.username:default}")
     private lateinit var clickhouseUser: String
 
-    @Value($$"${spring.datasource.password}")
+    @Value("${clickhouse.password:}")
     private lateinit var clickhousePassword: String
 
     @Bean
