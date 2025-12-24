@@ -62,3 +62,9 @@ The user service is integrated into the main docker-compose.yml file as a servic
 - JWT tokens contain user roles for authorization
 - Role-based access control for protected endpoints
 - CORS configured for cross-origin requests
+
+## Local Development
+### Environment
+```shell
+export USER_DATABASE_HOST=localhost;USER_DATABASE_PORT=6432;USER_DATABASE_USERNAME=botuser;USER_DATABASE_PWD=botuser
+```

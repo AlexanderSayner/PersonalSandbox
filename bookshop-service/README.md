@@ -88,3 +88,9 @@ The service is configured to run in Docker with the following ports:
 - `GET /graphql`: GraphQL endpoint
 - `GET /graphiql`: GraphiQL UI for testing queries
 - `GET /actuator/health`: Health check endpoint
+
+## Local Development
+### Environment
+```shell
+export BOOKSHOP_DB_PORT=6432;BOOKSHOP_DB_PWD=botuser;BOOKSHOP_DB_USERNAME=botuser;FLYWAY_ENABLED=true
+```

@@ -19,16 +19,17 @@ import java.util.*
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val userProfileRepository: UserProfileRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val userProfileRepository: UserProfileRepository
 ) : UserDetailsService {
+
+    lateinit var passwordEncoder: PasswordEncoder
 
     @Transactional
     fun registerUser(request: UserRegistrationRequest): User {
         if (userRepository.existsByUsername(request.username)) {
             throw RuntimeException("Username ${request.username} already exists")
         }
-        
+
         if (userRepository.existsByEmail(request.email)) {
             throw RuntimeException("Email ${request.email} already exists")
         }
@@ -78,8 +79,8 @@ class UserService(
         val user = userRepository.findById(userId)
             .orElseThrow { throw RuntimeException("User not found with id: $userId") }
 
-        val existingProfile = userProfileRepository.findByUserId(userId)
-        
+        val existingProfile = userProfileRepository.findByUser_UserId(userId)
+
         val profile = if (existingProfile != null) {
             existingProfile.apply {
                 firstName = profileRequest.firstName
@@ -100,7 +101,7 @@ class UserService(
 
     @Transactional(readOnly = true)
     fun getUserProfile(userId: UUID): UserProfile? {
-        return userProfileRepository.findByUserId(userId)
+        return userProfileRepository.findByUser_UserId(userId)
     }
 
     @Transactional(readOnly = true)

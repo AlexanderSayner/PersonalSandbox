@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 
+
 @Repository
 interface UserProfileRepository : JpaRepository<UserProfile, UUID> {
     fun findByUser(user: User): UserProfile?
-    fun findByUserId(userId: UUID): UserProfile?
+    fun findByUser_UserId(userId: UUID): UserProfile?
 }

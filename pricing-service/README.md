@@ -81,3 +81,9 @@ docker-compose up pricing-service
 - PostgreSQL database with `pricingdb`
 - Bookshop service (for product price information via gRPC)
 - gRPC communication with Bookshop service
+
+## Local Development
+### Environment
+```shell
+export PRICING_DB_HOST=localhost;PRICING_DB_PORT=6432;PRICING_DB_USERNAME=botuser;PRICING_DB_PWD=botuser
+```
