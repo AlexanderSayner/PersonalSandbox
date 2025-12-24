@@ -30,8 +30,7 @@ extra["springGrpcVersion"] = "1.0.0"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
-    implementation("org.springframework.boot:spring-boot-starter-cassandra")
-    implementation("org.springframework.data:spring-data-cassandra")
+    implementation("org.springframework.boot:spring-boot-starter-data-cassandra")
     implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
     implementation("io.grpc:grpc-services")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
