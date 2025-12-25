@@ -19,8 +19,7 @@ COPY settings.gradle.kts .
 COPY src/ ./src/
 
 # Build the application
-RUN gradle wrapper
-RUN ./gradlew bootJar
+RUN gradle bootJar
 
 # Extract the fat jar (or create a layered jar structure)
 RUN java -Djarmode=layertools -jar build/libs/*.jar extract
