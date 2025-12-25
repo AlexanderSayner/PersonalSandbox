@@ -12,8 +12,8 @@ class GraphQLConfig {
     fun runtimeWiringConfigurer(): RuntimeWiringConfigurer {
         return RuntimeWiringConfigurer { wiringBuilder ->
             wiringBuilder
+                .scalar(ExtendedScalars.UUID)
                 .scalar(ExtendedScalars.GraphQLBigDecimal)
-                .scalar(ExtendedScalars.GraphQLUUID)
         }
     }
 }

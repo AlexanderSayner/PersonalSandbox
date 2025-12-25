@@ -1,6 +1,5 @@
 package org.sandbox.statistics.graphql
 
-import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import org.sandbox.statistics.entity.SalesStatisticsEntity
 import org.sandbox.statistics.entity.UserActivityEntity
 import org.sandbox.statistics.service.StatisticsService
