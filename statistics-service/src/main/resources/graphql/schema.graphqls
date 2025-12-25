@@ -1,0 +1,25 @@
+scalar UUID
+scalar BigDecimal
+
+type SalesStatistics {
+    saleId: UUID!
+    productId: UUID!
+    quantity: Int!
+    amount: BigDecimal!
+    saleDate: String!
+}
+
+type UserActivity {
+    activityId: UUID!
+    userId: UUID!
+    activityType: String!
+    activityDate: String!
+}
+
+type Query {
+    salesStatistics: [SalesStatistics!]!
+    userActivities: [UserActivity!]!
+    salesByProduct(productId: ID!): [SalesStatistics!]!
+    activitiesByUser(userId: ID!): [UserActivity!]!
+    salesByDateRange(startDate: String!, endDate: String!): [SalesStatistics!]!
+}
