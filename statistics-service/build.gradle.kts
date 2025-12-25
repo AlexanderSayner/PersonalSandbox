@@ -25,6 +25,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-kafka")
     implementation("org.springframework.boot:spring-boot-starter-graphql")
+	implementation("com.graphql-java:graphql-java-extended-scalars:2023-04-10T07-05-23-9eae9c1")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("io.github.pelenthium:clickhouse-dialect-spring-boot-starter:1.2.0")

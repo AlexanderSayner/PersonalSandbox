@@ -1,33 +1,52 @@
-# Gradle
-.gradle/
+```
+# Compiled and build artifacts
+*.class
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
 build/
-!gradle/wrapper/gradle-wrapper.jar
-!gradle/wrapper/gradle-wrapper.properties
+target/
 
-# IDE
-.idea/
-.vscode/
+# Dependencies
+.gradle/
+node_modules/
+venv/
+.venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
 
-# Logs
+# Logs and temp files
 *.log
+*.tmp
+*.swp
 
 # Environment
 .env
 .env.local
 *.env.*
 
+# Editors
+.vscode/
+.idea/
+
 # OS
 .DS_Store
 Thumbs.db
 
-# Compiled files
-*.class
-*.jar
-*.war
-*.ear
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Archives
 *.zip
-*.tar
 *.gz
+*.tar
 *.tgz
 *.bz2
 *.xz
@@ -47,34 +66,4 @@ Thumbs.db
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
-
-# Python (if any Python files exist in the project)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.nox/
-.pytest_cache/
-.mypy_cache/
-
-# Node (if any JS/TS files exist in the project)
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-.pnp.cjs
-.pnp.loader.mjs
+```
