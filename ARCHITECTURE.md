@@ -28,13 +28,13 @@ This system consists of multiple microservices that work together to provide a c
 │                                              │ GraphQL          │                                   │
 │                                              ▼                  │                                   │
 │                                     ┌──────────────────┐        │                                   │
-│                                     │                  │        │ HTTP                              │
+│                                     │                  │        │ REST                              │
 │                                     │  Library         │        │                                   │
 │                                     │  Service         │        │                                   │
 │                                     │                  │        │                                   │
 │                                     └──────────────────┘        │                                   │
 │                                              │                  │                                   │
-│                                      GraphQL │                  │                                   │
+│                                        REST  │                  │                                   │
 │                                              │                  │                                   │
 │                                              ▼                  ▼                                   │
 │                                   ┌──────────────────┐ ┌──────────────────┐                         │
