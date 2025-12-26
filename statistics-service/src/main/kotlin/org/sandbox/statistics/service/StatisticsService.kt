@@ -35,24 +35,73 @@ class StatisticsService(
     }
 
     suspend fun getAllSalesStatistics(): List<SalesStatisticsEntity> {
-        TODO()
+        return jdbcTemplate.query(
+            "SELECT sale_id, product_id, quantity, amount, sale_date FROM sales_statistics"
+        ) { rs, _ ->
+            SalesStatisticsEntity(
+                saleId = UUID.fromString(rs.getString("sale_id")),
+                productId = UUID.fromString(rs.getString("product_id")),
+                quantity = rs.getInt("quantity"),
+                amount = rs.getBigDecimal("amount"),
+                saleDate = rs.getDate("sale_date").toLocalDate()
+            )
+        }
     }
 
     suspend fun getAllUserActivities(): List<UserActivityEntity> {
-        TODO()
+        return jdbcTemplate.query(
+            "SELECT activity_id, user_id, activity_type, activity_date FROM user_activity"
+        ) { rs, _ ->
+            UserActivityEntity(
+                activityId = UUID.fromString(rs.getString("activity_id")),
+                userId = UUID.fromString(rs.getString("user_id")),
+                activityType = rs.getString("activity_type"),
+                activityDate = rs.getDate("activity_date").toLocalDate()
+            )
+        }
     }
 
     suspend fun getSalesByProduct(productId: UUID): List<SalesStatisticsEntity> {
-        // Since we don't have a direct query method, we'll get all and filter
-        // In a real implementation, you would add a custom query method to the repository
-        TODO()
+        return jdbcTemplate.query(
+            "SELECT sale_id, product_id, quantity, amount, sale_date FROM sales_statistics WHERE product_id = ?",
+            arrayOf(productId)
+        ) { rs, _ ->
+            SalesStatisticsEntity(
+                saleId = UUID.fromString(rs.getString("sale_id")),
+                productId = UUID.fromString(rs.getString("product_id")),
+                quantity = rs.getInt("quantity"),
+                amount = rs.getBigDecimal("amount"),
+                saleDate = rs.getDate("sale_date").toLocalDate()
+            )
+        }
     }
 
     suspend fun getUserActivitiesByUserId(userId: UUID): List<UserActivityEntity> {
-        TODO()
+        return jdbcTemplate.query(
+            "SELECT activity_id, user_id, activity_type, activity_date FROM user_activity WHERE user_id = ?",
+            arrayOf(userId)
+        ) { rs, _ ->
+            UserActivityEntity(
+                activityId = UUID.fromString(rs.getString("activity_id")),
+                userId = UUID.fromString(rs.getString("user_id")),
+                activityType = rs.getString("activity_type"),
+                activityDate = rs.getDate("activity_date").toLocalDate()
+            )
+        }
     }
 
     suspend fun getSalesByDateRange(startDate: LocalDate, endDate: LocalDate): List<SalesStatisticsEntity> {
-        TODO()
+        return jdbcTemplate.query(
+            "SELECT sale_id, product_id, quantity, amount, sale_date FROM sales_statistics WHERE sale_date BETWEEN ? AND ?",
+            arrayOf(startDate, endDate)
+        ) { rs, _ ->
+            SalesStatisticsEntity(
+                saleId = UUID.fromString(rs.getString("sale_id")),
+                productId = UUID.fromString(rs.getString("product_id")),
+                quantity = rs.getInt("quantity"),
+                amount = rs.getBigDecimal("amount"),
+                saleDate = rs.getDate("sale_date").toLocalDate()
+            )
+        }
     }
 }
