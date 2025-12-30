@@ -1,6 +1,6 @@
 package org.sandbox.bookshop.graphql
 
-import org.sandbox.bookshop.graphql.integration.JavaEeHttpService
+import org.sandbox.bookshop.service.integration.JavaEeHttpService
 import org.sandbox.bookshop.service.BookshopService
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.QueryMapping

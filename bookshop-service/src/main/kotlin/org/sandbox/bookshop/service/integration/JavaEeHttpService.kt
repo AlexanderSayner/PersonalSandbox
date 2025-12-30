@@ -1,4 +1,4 @@
-package org.sandbox.bookshop.graphql.integration
+package org.sandbox.bookshop.service.integration
 
 import com.bookshop.grpc.BookInfo
 import org.springframework.stereotype.Service
