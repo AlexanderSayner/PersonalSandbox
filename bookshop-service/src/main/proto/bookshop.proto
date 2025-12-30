@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package com.bookshop.grpc;
+
+option java_multiple_files = true;
+option java_package = "com.bookshop.grpc";
+
+// Service definition for Bookshop gRPC service
+service BookshopService {
+  rpc GetProduct (GetProductRequest) returns (GetProductResponse);
+  rpc CreateProduct (CreateProductRequest) returns (CreateProductResponse);
+  rpc GetOrder (GetOrderRequest) returns (GetOrderResponse);
+  rpc CreateOrder (CreateOrderRequest) returns (CreateOrderResponse);
+  rpc GetBookFromLibrary (GetBookFromLibraryRequest) returns (GetBookFromLibraryResponse);
+}
+
+// Request and response messages for Product operations
+message GetProductRequest {
+  string product_id = 1;
+}
+
+message GetProductResponse {
+  Product product = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+message CreateProductRequest {
+  string title = 1;
+  string description = 2;
+  double price = 3;
+  ProductType product_type = 4;
+  string library_book_id = 5;
+}
+
+message CreateProductResponse {
+  Product product = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+// Request and response messages for Order operations
+message GetOrderRequest {
+  string order_id = 1;
+}
+
+message GetOrderResponse {
+  Order order = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+message CreateOrderRequest {
+  string user_id = 1;
+  OrderStatus status = 2;
+  double total_amount = 3;
+}
+
+message CreateOrderResponse {
+  Order order = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+// Request and response messages for Library Book operations
+message GetBookFromLibraryRequest {
+  int32 book_id = 1;
+}
+
+message GetBookFromLibraryResponse {
+  BookInfo book_info = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+// Data models
+message Product {
+  string product_id = 1;
+  string title = 2;
+  string description = 3;
+  double price = 4;
+  ProductType product_type = 5;
+  string library_book_id = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message Order {
+  string order_id = 1;
+  string user_id = 2;
+  OrderStatus status = 3;
+  double total_amount = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+message BookInfo {
+  int32 id = 1;
+  string title = 2;
+  string author = 3;
+  int32 year = 4;
+}
+
+// Enums
+enum ProductType {
+  BOOK = 0;
+  DIGITAL_BOOK = 1;
+  PHYSICAL_GOOD = 2;
+  DIGITAL_GOOD = 3;
+}
+
+enum OrderStatus {
+  PENDING = 0;
+  COMPLETED = 1;
+  CANCELLED = 2;
+}
