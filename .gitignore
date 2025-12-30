@@ -1,73 +1,48 @@
-# General
-*.log
-*.tmp
-*.swp
-.DS_Store
-
-# IDEs
-## IntelliJ IDEA
-.idea/
-*.iml
-*.iws
-*.ipr
-out/
-
-## Eclipse
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings/
-.springBeans
-.sts4-cache
-.metadata/
-bin/
-tmp/
-*.bak
-*~.nib
-local.properties
-.loadpath
-.recommenders
-.externalToolBuilders/
-*.launch
-.cproject
-.buildpath
-.sbteclipse
-.tern-project
-.texlipse
-.cache-main
-.scala_dependencies
-.worksheet
-
-## Netbeans
-nbproject/private/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-## Visual Studio Code
-.vscode/
-
-# Build tools
-## Gradle
-.gradle/
-!gradle-wrapper.jar
-gradletasknamecache
-
-# Frameworks
-## Jakarta EE and Spring Boot
-.mvn/
-mvnw
-mvnw.cmd
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-# Svelte
+```
+# Dependencies
 node_modules/
+
+# Build outputs
+dist/
+build/
+.svelte-kit/
+vite/
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Python (if present)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+
+# System
+.DS_Store
+Thumbs.db
+```
