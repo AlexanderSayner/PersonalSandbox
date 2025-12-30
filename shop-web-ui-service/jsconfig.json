@@ -1,28 +1,3 @@
 {
-  "compilerOptions": {
-    "moduleResolution": "node",
-    "target": "es2020",
-    "lib": ["es2020", "DOM", "DOM.Iterable"],
-    "skipLibCheck": true,
-    
-    // svelte-preprocess cannot figure out whether you have a value or a type, so tell TypeScript
-    // to enforce using `$svelte` for types
-    "importsNotUsedAsValues": "error",
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    // To have warnings / errors of the Svelte compiler at the correct position,
-    // enable source maps by default.
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"],
-      "$app/*": ["node_modules/@sveltejs/kit/src/runtime/app/*"]
-    }
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules/**/*", "dist/**/*"]
+  "extends": "./.svelte-kit/tsconfig.json"
 }
