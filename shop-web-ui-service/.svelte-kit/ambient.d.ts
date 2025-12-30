@@ -55,7 +55,6 @@ declare module '$env/static/private' {
 	export const NODE: string;
 	export const npm_package_name: string;
 	export const TIKTOKEN_CACHE_DIR: string;
-	export const npm_config_legacy_peer_deps: string;
 	export const LANG: string;
 	export const TERM_PROGRAM: string;
 	export const npm_lifecycle_script: string;
@@ -135,7 +134,6 @@ declare module '$env/dynamic/private' {
 		NODE: string;
 		npm_package_name: string;
 		TIKTOKEN_CACHE_DIR: string;
-		npm_config_legacy_peer_deps: string;
 		LANG: string;
 		TERM_PROGRAM: string;
 		npm_lifecycle_script: string;

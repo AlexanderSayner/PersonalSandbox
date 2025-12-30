@@ -1,32 +1,13 @@
 ```
 # SvelteKit build output
 .svelte-kit/
-output/
-.svelte-kit/**/generated/
-.svelte-kit/**/output/
-
-# Dependencies
-node_modules/
+# Vite build artifacts
+.vite/
+# Package manager
 package-lock.json
-
-# Environment variables
-.env
-.env.local
-.env.*
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
+# Temp files
+*.tmp
+*.swp
 # Logs
 *.log
-
-# Build artifacts
-dist/
-build/
-target/
 ```
