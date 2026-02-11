@@ -71,3 +71,5 @@ target/
 
 # Svelte
 node_modules/
+.svelte-kit/
+package-lock.json
