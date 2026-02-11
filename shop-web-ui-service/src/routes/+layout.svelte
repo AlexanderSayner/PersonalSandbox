@@ -1,0 +1,43 @@
+<script>
+  import '../app.css';
+</script>
+
+<div class="app-container">
+  <header class="header">
+    <div class="header-content">
+      <h1 class="logo">ShopWeb</h1>
+      <nav class="nav">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/products" class="nav-link">Products</a>
+        <a href="/orders" class="nav-link">Orders</a>
+        <div class="basket-icon">
+          <span class="basket-count">0</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+        </div>
+        <button class="login-btn">Login</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <aside class="sidebar">
+      <h3>Categories</h3>
+      <ul class="categories">
+        <li><a href="/products?category=all" class="category-link">All Products</a></li>
+        <li><a href="/products?category=electronics" class="category-link">Electronics</a></li>
+        <li><a href="/products?category=clothing" class="category-link">Clothing</a></li>
+        <li><a href="/products?category=books" class="category-link">Books</a></li>
+        <li><a href="/products?category=home" class="category-link">Home & Garden</a></li>
+        <li><a href="/products?category=sports" class="category-link">Sports</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <slot />
+    </main>
+  </div>
+</div>

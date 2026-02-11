@@ -70,11 +70,6 @@ dependencies {
     testImplementation 'commons-io:commons-io:2.14.0'
 }
 
-// Task to build WAR file
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
 // Create a task to copy dependencies (for Docker)
 task copyDependencies(type: Copy) {
     from configurations.runtimeClasspath
