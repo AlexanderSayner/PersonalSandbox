@@ -73,3 +73,4 @@ target/
 node_modules/
 .svelte-kit/
 package-lock.json
+*.mjs
