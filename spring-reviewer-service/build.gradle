@@ -3,7 +3,7 @@ plugins {
     id 'war'
 }
 
-group = 'com.reviewer'
+group = 'org.sandbox.reviewer'
 version = '1.0.0'
 sourceCompatibility = '17'
 
@@ -31,7 +31,7 @@ dependencies {
     implementation 'io.lettuce:lettuce-core:7.2.0.RELEASE'
 
     // Spring Data MongoDB
-    implementation 'org.springframework.data:spring-data-mongodb:5.0.0'
+    implementation 'org.springframework.data:spring-data-mongodb:5.0.1'
     // MongoDB driver
     implementation 'org.mongodb:mongodb-driver-sync:5.6.2'
     
@@ -68,11 +68,6 @@ dependencies {
 
     // Apache utils
     testImplementation 'commons-io:commons-io:2.14.0'
-}
-
-// Task to build WAR file
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
 }
 
 // Create a task to copy dependencies (for Docker)

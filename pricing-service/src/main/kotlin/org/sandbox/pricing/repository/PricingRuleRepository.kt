@@ -1,0 +1,21 @@
+package org.sandbox.pricing.repository
+
+import org.sandbox.pricing.entity.PricingRule
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+import java.util.*
+
+@Repository
+interface PricingRuleRepository : JpaRepository<PricingRule, UUID> {
+    fun findByMethodIdAndMinDistanceLessThanEqualAndMaxDistanceGreaterThanEqual(
+        methodId: UUID?,
+        distance: Int,
+        distance1: Int
+    ): List<PricingRule>
+    
+    fun findByMethodIdAndMinWeightLessThanEqualAndMaxWeightGreaterThanEqual(
+        methodId: UUID?,
+        weight: java.math.BigDecimal,
+        weight1: java.math.BigDecimal
+    ): List<PricingRule>
+}

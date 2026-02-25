@@ -1,4 +1,41 @@
 services:
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"      # For Internal Communication
+      - "9093:9093"      # For External Communication
+      - "29093:29093"    # For Controller Communication
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9093,CONTROLLER://kafka:29093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+    networks:
+      - app-network
+
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse-statistics
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_DB: statistics_db
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: password
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks:
+      - app-network
+
   postgres:
     image: postgres:15
     container_name: postgres-db
@@ -10,26 +47,9 @@ services:
       - "6543:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/create-databases.sql:/docker-entrypoint-initdb.d/create-databases.sql
     networks:
       - app-network
-
-  javaee-app:
-    build:
-      context: ./javaee-graphql-project
-      dockerfile: Dockerfile
-    container_name: javaee-graphql-app
-    ports:
-      - "8090:8080"
-      - "9990:9990"
-    depends_on:
-      - postgres
-    environment:
-      - POSTGRES_DB=librarydb
-      - POSTGRES_USER=libraryuser
-      - POSTGRES_PASSWORD=librarypass
-    networks:
-      - app-network
-    restart: unless-stopped
 
   adminer:
     image: adminer
@@ -46,6 +66,23 @@ services:
       - postgres
     networks:
       - app-network
+
+  javaee-app:
+    build:
+      context: ./javaee-graphql-project
+      dockerfile: Dockerfile
+    container_name: javaee-graphql-app
+    ports:
+      - "8090:8080"
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_DB=librarydb
+      - POSTGRES_USER=libraryuser
+      - POSTGRES_PASSWORD=librarypass
+    networks:
+      - app-network
+    restart: unless-stopped
 
   # Spring Reviewer Service
   reviewer-service:
@@ -88,7 +125,121 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: rootpwd
     volumes:
       - mongodb_data:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./init-scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  bookshop-service:
+    build:
+      context: ./bookshop-service
+      dockerfile: Dockerfile
+    container_name: bookshop-service
+    ports:
+      - "8083:8080"
+    depends_on:
+      - postgres
+      - javaee-app
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bookshopdb
+      - SPRING_DATASOURCE_USERNAME=libraryuser
+      - SPRING_DATASOURCE_PASSWORD=librarypass
+      - JAVAEE_SERVICE_ADDRESS=javaee-app:8090
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  cassandra:
+    image: cassandra:5.0
+    container_name: workshop-cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=128M
+      - CASSANDRA_INIT_SCRIPT=/docker-entrypoint-initdb.d/init.cql
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+      - ./init-scripts/init.cql:/docker-entrypoint-initdb.d/init.cql
+    healthcheck:
+      test: [ "CMD-SHELL", "cqlsh -e 'DESCRIBE KEYSPACES;'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  workshop-service:
+    build:
+      context: ./workshop-service
+      dockerfile: Dockerfile
+    container_name: workshop-service
+    ports:
+      - "8084:8081"
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    environment:
+      - SPRING_CASSANDRA_CONTACT_POINTS=cassandra
+      - SPRING_CASSANDRA_LOCAL_DATACENTER=datacenter1
+      - GRPC_CLIENT_BOOKSHOP_SERVICE_ADDRESS=static://bookshop-service:9090
+    restart: on-failure
+
+  # Pricing Service
+  pricing-service:
+    build:
+      context: ./pricing-service
+      dockerfile: Dockerfile
+    container_name: pricing-service
+    ports:
+      - "8085:8085"
+      - "9091:9091"
+    depends_on:
+      - postgres
+      - bookshop-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/pricingdb
+      - SPRING_DATASOURCE_USERNAME=libraryuser
+      - SPRING_DATASOURCE_PASSWORD=librarypass
+      - GRPC_CLIENT_BOOKSHOP_SERVICE_ADDRESS=static://bookshop-service:9090
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Statistics Service
+  statistics-service:
+    build:
+      context: ./statistics-service
+      dockerfile: Dockerfile
+    container_name: statistics-service
+    ports:
+      - "8086:8083"
+    depends_on:
+      - kafka
+      - clickhouse
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - CLICKHOUSE_URL=jdbc:clickhouse://clickhouse:8123/statistics_db
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=password
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # User Service
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/userdb
+      - SPRING_DATASOURCE_USERNAME=libraryuser
+      - SPRING_DATASOURCE_PASSWORD=librarypass
+      - JWT_SECRET=mySecretKeyMustBeLongerThan256BitsForHS512Algorithm
+      - JWT_EXPIRATION=86400000
     networks:
       - app-network
     restart: unless-stopped
@@ -96,6 +247,8 @@ services:
 volumes:
   postgres_data:
   mongodb_data:
+  cassandra_data:
+  clickhouse_data:
 
 networks:
   app-network:

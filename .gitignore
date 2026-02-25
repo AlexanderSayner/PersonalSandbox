@@ -23,9 +23,7 @@ out/
 .metadata/
 bin/
 tmp/
-*.tmp
 *.bak
-*.swp
 *~.nib
 local.properties
 .loadpath
@@ -33,7 +31,6 @@ local.properties
 .externalToolBuilders/
 *.launch
 .cproject
-.factorypath
 .buildpath
 .sbteclipse
 .tern-project
@@ -58,7 +55,6 @@ build/
 # Build tools
 ## Gradle
 .gradle/
-build/
 !gradle-wrapper.jar
 gradletasknamecache
 
@@ -75,4 +71,5 @@ target/
 
 # Svelte
 node_modules/
-dist/
+.svelte-kit/
+package-lock.json

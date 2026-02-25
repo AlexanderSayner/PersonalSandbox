@@ -1,0 +1,28 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: workshop-service
+  cassandra:
+    contact-points: localhost:9042
+    keyspace-name: workshop_keyspace
+    local-datacenter: datacenter1
+    schema-action: CREATE_IF_NOT_EXISTS
+
+# gRPC client configuration for bookshop service
+grpc:
+  client:
+    bookshop-service:
+      address: static://localhost:9090
+      enableKeepAlive: true
+      keepAliveTime: 30s
+      keepAliveTimeout: 5s
+      keepAliveWithoutCalls: true
+
+# OpenAPI configuration
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
